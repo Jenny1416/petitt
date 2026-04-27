@@ -1,0 +1,105 @@
+[
+  {
+    "id": "p1",
+    "name": "Alimento Húmedo Royal Canin Renal Support",
+    "brand": "Royal Canin",
+    "category": "Perros",
+    "price": 40000,
+    "oldPrice": 56890,
+    "discount": 20,
+    "rating": 4.8,
+    "stock": 18,
+    "image": "https://m.media-amazon.com/images/I/61p3G9VbY-L._AC_SL1000_.jpg",
+    "description": "Alimento húmedo especializado para perros adultos. Apoya una nutrición balanceada y tiene alta aceptación por su textura suave.",
+    "tags": [
+      "Oferta",
+      "Caninos",
+      "Salud renal"
+    ]
+  },
+  {
+    "id": "p2",
+    "name": "Alimento Seco Ronik Grain Free Salmón",
+    "brand": "Ronik",
+    "category": "Gatos",
+    "price": 69000,
+    "oldPrice": 72900,
+    "discount": 20,
+    "rating": 4.6,
+    "stock": 11,
+    "image": "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?q=80&w=700",
+    "description": "Comida seca tipo grain free con sabor a salmón. Ideal para gatos y mascotas con digestión sensible.",
+    "tags": [
+      "Novedad",
+      "Grain Free"
+    ]
+  },
+  {
+    "id": "p3",
+    "name": "Kit Arnés y Correa para Gato Puppy Plus Fucsia",
+    "brand": "Puppy Plus",
+    "category": "Gatos",
+    "price": 16000,
+    "oldPrice": 20000,
+    "discount": 20,
+    "rating": 4.5,
+    "stock": 25,
+    "image": "https://images.unsplash.com/photo-1601758125946-6ec2ef64daf8?q=80&w=700",
+    "description": "Arnés cómodo y correa resistente para paseos seguros. Diseño ligero con ajuste sencillo.",
+    "tags": [
+      "Accesorios",
+      "Promoción"
+    ]
+  },
+  {
+    "id": "p4",
+    "name": "Alimento Húmedo Wow Can Cerdo 300g",
+    "brand": "Wow Can",
+    "category": "Perros",
+    "price": 16000,
+    "oldPrice": 20000,
+    "discount": 20,
+    "rating": 4.7,
+    "stock": 30,
+    "image": "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=700",
+    "description": "Alimento húmedo para perros con proteína de cerdo. Presentación práctica para porciones diarias.",
+    "tags": [
+      "Perros",
+      "Oferta"
+    ]
+  },
+  {
+    "id": "p5",
+    "name": "Pelota Interactiva para Mascotas",
+    "brand": "PETIT",
+    "category": "Juguetes",
+    "price": 12000,
+    "oldPrice": 15000,
+    "discount": 10,
+    "rating": 4.3,
+    "stock": 40,
+    "image": "https://images.unsplash.com/photo-1601758064130-41c44e52c588?q=80&w=700",
+    "description": "Juguete interactivo para estimular la actividad física y mental de perros y gatos.",
+    "tags": [
+      "Juguetes",
+      "Mascotas"
+    ]
+  },
+  {
+    "id": "p6",
+    "name": "Shampoo Suave para Perros y Gatos",
+    "brand": "Fancy Pets",
+    "category": "Cuidado",
+    "price": 19000,
+    "oldPrice": 22000,
+    "discount": 15,
+    "rating": 4.4,
+    "stock": 17,
+    "image": "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=700",
+    "description": "Shampoo de limpieza suave para higiene frecuente. Aroma agradable y fórmula de uso general.",
+    "tags": [
+      "Cuidado",
+      "Baño"
+    ]
+  }
+]
