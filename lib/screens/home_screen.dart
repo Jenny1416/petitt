@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_state.dart';
+import '../routes/app_routes.dart';
 import '../widgets/logo.dart';
 import '../widgets/product_card.dart';
 import 'cart_screen.dart';
@@ -25,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
           cat: cat,
           onQ: (v) => setState(() => q = v),
           onCat: (v) => setState(() => cat = v)),
-      _Favorites(),
+      const _Favorites(),
       const CartScreen(inTab: true),
       const OrdersScreen(inTab: true),
       const ProfileScreen()
@@ -36,8 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
             centerTitle: false,
             actions: [
               IconButton(
-                  onPressed: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => const CartScreen())),
+                  onPressed: () => Navigator.pushNamed(context, AppRoutes.cart),
                   icon: Badge(
                       label: Text('${app.cart.length}'),
                       child: const Icon(Icons.shopping_cart_outlined)))
@@ -131,6 +131,7 @@ class _Catalog extends StatelessWidget {
 }
 
 class _Favorites extends StatelessWidget {
+  const _Favorites();
   @override
   Widget build(BuildContext context) {
     final fav = context.watch<AppState>().favorites;

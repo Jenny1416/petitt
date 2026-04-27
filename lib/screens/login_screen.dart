@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_state.dart';
+import '../routes/app_routes.dart';
 import '../widgets/logo.dart';
 import '../widgets/primary_button.dart';
-import 'home_screen.dart';
-import 'forgot_password_screen.dart';
-import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,15 +18,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        resizeToAvoidBottomInset: true,
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.only(
-              left: 24,
-              right: 24,
-              top: 24,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-            ),
+            padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -37,9 +29,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 40),
                 const Text(
                   'Iniciar Sesión',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
                 TextField(
                   controller: email,
                   keyboardType: TextInputType.emailAddress,
@@ -66,40 +58,29 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Center(
                   child: TextButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const ForgotPasswordScreen(),
-                      ),
-                    ),
+                    onPressed: () =>
+                        Navigator.pushNamed(context, AppRoutes.forgotPassword),
                     child: const Text('¿Olvidaste tu contraseña?'),
                   ),
                 ),
-                const SizedBox(height: 305),
+                const SizedBox(height: 24),
                 PrimaryButton(
                   text: loading ? 'Validando...' : 'Ingresar',
                   onTap: loading
                       ? null
                       : () async {
                           setState(() => loading = true);
-
                           final ok = await context
                               .read<AppState>()
                               .auth
                               .login(email.text, pass.text);
-
                           setState(() => loading = false);
 
                           if (!context.mounted) return;
 
                           if (ok) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const HomeScreen(),
-                              ),
-                              (_) => false,
-                            );
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, AppRoutes.home, (_) => false);
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -112,12 +93,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Center(
                   child: TextButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const RegisterScreen(),
-                      ),
-                    ),
+                    onPressed: () =>
+                        Navigator.pushNamed(context, AppRoutes.register),
                     child: const Text('Crear cuenta'),
                   ),
                 ),

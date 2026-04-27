@@ -26,7 +26,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     const SizedBox(height: 45),
                     const Text('¿Has olvidado tu contraseña?',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16)),
+                            fontWeight: FontWeight.bold, fontSize: 20)),
                     const SizedBox(height: 18),
                     TextField(
                         controller: email,

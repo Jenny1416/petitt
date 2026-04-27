@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import '../routes/app_routes.dart';
 import '../widgets/logo.dart';
 import '../widgets/primary_button.dart';
-import 'login_screen.dart';
-import 'register_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -19,20 +18,10 @@ class SplashScreen extends StatelessWidget {
                 const Spacer(),
                 PrimaryButton(
                   text: 'Empecemos',
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const RegisterScreen(),
-                    ),
-                  ),
+                  onTap: () => Navigator.pushNamed(context, AppRoutes.register),
                 ),
                 TextButton.icon(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const LoginScreen(),
-                    ),
-                  ),
+                  onPressed: () => Navigator.pushNamed(context, AppRoutes.login),
                   icon: const Icon(Icons.arrow_circle_right),
                   label: const Text('Ya tengo una cuenta'),
                 ),

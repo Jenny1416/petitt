@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/app_state.dart';
-import 'screens/splash_screen.dart';
+import 'routes/app_routes.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
@@ -13,14 +13,17 @@ class PetitApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'PETIT',
-        theme: ThemeData(
-            useMaterial3: true,
-            fontFamily: 'Arial',
-            colorScheme:
-                ColorScheme.fromSeed(seedColor: const Color(0xff078818)),
-            scaffoldBackgroundColor: Colors.white),
-        home: const SplashScreen());
+      debugShowCheckedModeBanner: false,
+      title: 'PETIT',
+      theme: ThemeData(
+          useMaterial3: true,
+          fontFamily: 'Arial',
+          colorScheme:
+              ColorScheme.fromSeed(seedColor: const Color(0xff078818)),
+          scaffoldBackgroundColor: Colors.white),
+      initialRoute: AppRoutes.splash,
+      routes: AppRoutes.getRoutes(),
+      onGenerateRoute: AppRoutes.onGenerateRoute,
+    );
   }
 }
