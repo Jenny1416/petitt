@@ -34,7 +34,7 @@ class OnboardingPage extends StatelessWidget {
             ),
           ),
 
-          // Contenido centrado pero abajo
+          // Contenido
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(24),
@@ -64,7 +64,7 @@ class OnboardingPage extends StatelessWidget {
                   PrimaryButton(
                     text: 'Empezar',
                     onTap: () {
-                      Navigator.pushReplacementNamed(context, AppRoutes.home);
+                      Navigator.pushNamed(context, AppRoutes.onboarding1);
                     },
                   ),
                 ],

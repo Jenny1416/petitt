@@ -19,8 +19,7 @@ class OnboardingPage01 extends StatelessWidget {
             children: [
               const OnboardingHeader(stepText: '1/2'),
               const SizedBox(height: 24),
-              const OnboardingImage(
-                  imagePath: 'assets/images/onboarding_01.jpg'),
+              const OnboardingImage(imagePath: 'assets/images/onboarding_01.jpg'),
               const SizedBox(height: 24),
               const OnboardingText(
                 title: 'Seleccionar Productos',
