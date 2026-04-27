@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/product.dart';
 import '../providers/app_state.dart';
-import '../screens/product_detail_screen.dart';
+import '../routes/app_routes.dart';
 
 class ProductCard extends StatelessWidget {
   final Product p;
@@ -12,11 +12,10 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     return InkWell(
-      onTap: () => Navigator.push(
+      onTap: () => Navigator.pushNamed(
         context,
-        MaterialPageRoute(
-          builder: (_) => ProductDetailScreen(product: p),
-        ),
+        AppRoutes.productDetail,
+        arguments: p,
       ),
       child: Card(
         elevation: 1,
