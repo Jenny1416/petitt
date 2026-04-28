@@ -12,7 +12,7 @@ class NewPasswordScreen extends StatefulWidget {
 }
 
 class _NewPasswordScreenState extends State<NewPasswordScreen> {
-  final p1 = TextEditingController(), p2 = TextEditingController();
+  final TextEditingController p1 = TextEditingController(), p2 = TextEditingController();
   @override
   Widget build(BuildContext context) => Scaffold(
       body: SafeArea(

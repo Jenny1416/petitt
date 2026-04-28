@@ -14,9 +14,9 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final email = TextEditingController();
-  final pass = TextEditingController();
-  final phone = TextEditingController();
+  final TextEditingController email = TextEditingController();
+  final TextEditingController pass = TextEditingController();
+  final TextEditingController phone = TextEditingController();
   File? _image;
 
   Future<void> _pickImage() async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/order.dart';
 import '../providers/app_state.dart';
 import '../routes/app_routes.dart';
 import '../widgets/logo.dart';
@@ -17,7 +18,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String q = '', cat = 'Todos';
-  int index = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onCat: (v) => setState(() => cat = v)),
       const _Favorites(),
       const CartScreen(inTab: true),
-      const OrdersScreen(inTab: true),
+      const _OrdersTabWrapper(),
       const ProfileScreen()
     ];
 
@@ -45,10 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       label: Text('${app.cart.length}'),
                       child: const Icon(Icons.shopping_cart_outlined)))
             ]),
-        body: IndexedStack(index: index, children: pages),
+        body: IndexedStack(index: app.homeTabIndex, children: pages),
         bottomNavigationBar: NavigationBar(
-          selectedIndex: index,
-          onDestinationSelected: (i) => setState(() => index = i),
+          selectedIndex: app.homeTabIndex,
+          onDestinationSelected: (i) => app.setHomeTabIndex(i),
           destinations: const [
             NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Inicio'),
             NavigationDestination(icon: Icon(Icons.favorite_border), selectedIcon: Icon(Icons.favorite), label: 'Deseos'),
@@ -60,6 +60,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+class _OrdersTabWrapper extends StatelessWidget {
+  const _OrdersTabWrapper();
+
+  @override
+  Widget build(BuildContext context) {
+    final app = context.watch<AppState>();
+    // We want "En Camino" if there's a very recent order, otherwise default to index 0
+    bool hasRecentOrder = app.orders.isNotEmpty && 
+        (app.orders.first.status == OrderStatus.processing || app.orders.first.status == OrderStatus.shipping);
+    
+    return OrdersScreen(inTab: true, initialTabIndex: hasRecentOrder ? 1 : 0);
+  }
+}
+
 class _Catalog extends StatelessWidget {
   final String q, cat;
   final ValueChanged<String> onQ, onCat;
@@ -67,7 +81,7 @@ class _Catalog extends StatelessWidget {
 
   // 1. Widget de Categorías de Animales (Círculos)
   Widget _buildAnimalCircles(BuildContext context) {
-    final animals = [
+    const animals = [
       {'n': 'Todos', 'i': 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=100'},
       {'n': 'Pájaros', 'i': 'https://images.unsplash.com/photo-1522926193341-e9fed196d4ad?w=100'},
       {'n': 'Perros', 'i': 'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=100'},
@@ -135,7 +149,7 @@ class _Catalog extends StatelessWidget {
             final p = flashProducts[i];
             return Expanded(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 2),
+                padding: const EdgeInsets.symmetric(horizontal: 2),
                 child: InkWell(
                   onTap: () => Navigator.pushNamed(context, AppRoutes.offer),
                   child: Container(
@@ -202,7 +216,7 @@ class _Catalog extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final data = app.search(q, cat);
-    final filterCats = ['Todos', 'Perros', 'Gatos', 'Juguetes', 'Cuidado'];
+    const filterCats = ['Todos', 'Perros', 'Gatos', 'Juguetes', 'Cuidado'];
 
     return ListView(
       padding: const EdgeInsets.all(16),

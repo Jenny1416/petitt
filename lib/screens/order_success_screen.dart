@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/order.dart';
+import '../providers/app_state.dart';
 import '../widgets/primary_button.dart';
-import 'orders_screen.dart';
+import 'home_screen.dart';
 
 class OrderSuccessScreen extends StatelessWidget {
   final OrderModel order;
@@ -29,12 +31,17 @@ class OrderSuccessScreen extends StatelessWidget {
                 const SizedBox(height: 28),
                 PrimaryButton(
                   text: 'Ver pedido',
-                  onTap: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const OrdersScreen(),
-                    ),
-                  ),
+                  onTap: () {
+                    final app = context.read<AppState>();
+                    app.setHomeTabIndex(3); // Go to Orders tab
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const HomeScreen(),
+                      ),
+                      (route) => false,
+                    );
+                  },
                 ),
               ],
             ),

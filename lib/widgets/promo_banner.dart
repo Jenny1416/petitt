@@ -123,7 +123,7 @@ class _PromoBannerState extends State<PromoBanner> {
           image: AssetImage(banner.image),
           fit: BoxFit.cover,
           colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.2),
+            Colors.black.withAlpha((0.2 * 255).toInt()),
             BlendMode.darken,
           ),
         ),
