@@ -57,6 +57,20 @@ class AppState extends ChangeNotifier {
   }
 
   bool isFav(Product p) => favorites.contains(p);
+
+  void updateUserInfo({String? name, String? phone}) {
+    if (auth.currentUser != null) {
+      if (name != null) auth.currentUser!.name = name;
+      if (phone != null) auth.currentUser!.phone = phone;
+      notifyListeners();
+    }
+  }
+
+  void logout() {
+    auth.currentUser = null;
+    notifyListeners();
+  }
+
   OrderModel createOrder(String address, String payment) {
     final id =
         'PET-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
