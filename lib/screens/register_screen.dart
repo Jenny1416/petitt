@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_state.dart';
 import '../routes/app_routes.dart';
@@ -12,9 +14,24 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final email = TextEditingController(),
-      pass = TextEditingController(),
-      phone = TextEditingController();
+  final email = TextEditingController();
+  final pass = TextEditingController();
+  final phone = TextEditingController();
+  File? _image;
+
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50, // Comprime la imagen para no ocupar mucho espacio
+    );
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -32,11 +49,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 const SizedBox(height: 18),
-                const Center(
-                  child: CircleAvatar(
-                    radius: 34,
-                    backgroundColor: Color(0xffe8f7ea),
-                    child: Icon(Icons.camera_alt, color: Color(0xff078818)),
+                Center(
+                  child: GestureDetector(
+                    onTap: _pickImage,
+                    child: CircleAvatar(
+                      radius: 34,
+                      backgroundColor: const Color(0xffe8f7ea),
+                      backgroundImage: _image != null ? FileImage(_image!) : null,
+                      child: _image == null
+                          ? const Icon(Icons.camera_alt, color: Color(0xff078818))
+                          : null,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 18),
@@ -82,6 +105,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       );
                       return;
                     }
+                    
+                    // Aquí podrías guardar la imagen (_image) en tu AppState o base de datos
                     final ok = await context
                         .read<AppState>()
                         .auth

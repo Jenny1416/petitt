@@ -20,7 +20,7 @@ class OnboardingPage02 extends StatelessWidget {
               const OnboardingHeader(stepText: '2/2'),
               const SizedBox(height: 24),
               const OnboardingImage(
-                  imagePath: 'assets/images/onboarding_02.jpg'),
+                  imagePath: 'assets/images/onboarding_02.png'),
               const SizedBox(height: 24),
               const OnboardingText(
                 title: 'Recibe en Casa',
