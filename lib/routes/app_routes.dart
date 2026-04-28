@@ -17,6 +17,7 @@ import '../screens/onboarding_page.dart';
 import '../screens/onboarding_page_01.dart';
 import '../screens/onboarding_page_02.dart';
 import '../screens/offer_page.dart';
+import '../screens/category_result_screen.dart';
 import '../models/product.dart';
 import '../models/order.dart';
 
@@ -39,6 +40,7 @@ class AppRoutes {
   static const String onboarding1 = '/onboarding1';
   static const String onboarding2 = '/onboarding2';
   static const String offer = '/offer';
+  static const String categoryResult = '/category-result';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -61,6 +63,11 @@ class AppRoutes {
 
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case categoryResult:
+        final category = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => CategoryResultScreen(category: category),
+        );
       case productDetail:
         final product = settings.arguments as Product;
         return MaterialPageRoute(

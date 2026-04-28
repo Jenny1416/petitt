@@ -1,7 +1,8 @@
 class Product {
   final String id, name, brand, category, image, description;
   final double price, oldPrice, rating;
-  final int discount, stock;
+  final int discount;
+  int stock;
   final List<String> tags;
   Product(
       {required this.id,

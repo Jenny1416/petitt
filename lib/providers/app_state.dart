@@ -71,6 +71,11 @@ class AppState extends ChangeNotifier {
             cart.map((e) => CartItem(e.product, quantity: e.quantity)).toList(),
         total: total);
     orders.insert(0, order);
+    // Reducir stock de los productos
+    for (var item in cart) {
+      final product = products.firstWhere((p) => p.id == item.product.id);
+      product.stock -= item.quantity;
+    }
     cart.clear();
     notifyListeners();
     return order;

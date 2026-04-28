@@ -34,17 +34,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               const SizedBox(height: 14),
               const Text('Método de pago',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              RadioListTile(
+              RadioListTile<String>(
                   value: 'Visa',
                   groupValue: payment,
                   onChanged: (v) => setState(() => payment = v!),
                   title: const Text('VISA ****2109')),
-              RadioListTile(
+              RadioListTile<String>(
                   value: 'PayPal',
                   groupValue: payment,
                   onChanged: (v) => setState(() => payment = v!),
                   title: const Text('PayPal ****2109')),
-              RadioListTile(
+              RadioListTile<String>(
                   value: 'Contra entrega',
                   groupValue: payment,
                   onChanged: (v) => setState(() => payment = v!),
