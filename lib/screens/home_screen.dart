@@ -82,7 +82,7 @@ class _Catalog extends StatelessWidget {
   // 1. Widget de Categorías de Animales (Círculos)
   Widget _buildAnimalCircles(BuildContext context) {
     const animals = [
-      {'n': 'Todos', 'i': 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=100'},
+      {'n': 'Hamsters', 'i': 'https://images.unsplash.com/photo-1548767797-d8c844163c4c?w=100'},
       {'n': 'Pájaros', 'i': 'https://images.unsplash.com/photo-1522926193341-e9fed196d4ad?w=100'},
       {'n': 'Perros', 'i': 'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=100'},
       {'n': 'Gatos', 'i': 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=100'},
@@ -216,7 +216,7 @@ class _Catalog extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final data = app.search(q, cat);
-    const filterCats = ['Todos', 'Perros', 'Gatos', 'Juguetes', 'Cuidado'];
+    const filterCats = ['Todos', 'Alimento', 'Accesorio', 'Juguete', 'Cuidado'];
 
     return ListView(
       padding: const EdgeInsets.all(16),

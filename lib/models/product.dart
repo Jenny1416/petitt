@@ -1,7 +1,7 @@
 import 'review.dart';
 
 class Product {
-  final String id, name, brand, category, image, description;
+  final String id, name, brand, category, type, image, description;
   final double price, oldPrice;
   double rating;
   final int discount;
@@ -14,6 +14,7 @@ class Product {
     required this.name,
     required this.brand,
     required this.category,
+    required this.type,
     required this.price,
     required this.oldPrice,
     required this.discount,
@@ -30,6 +31,7 @@ class Product {
         name: j['name'],
         brand: j['brand'],
         category: j['category'],
+        type: j['type'] ?? 'Accesorio',
         price: (j['price'] as num).toDouble(),
         oldPrice: (j['oldPrice'] as num).toDouble(),
         discount: j['discount'],

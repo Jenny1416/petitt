@@ -64,9 +64,9 @@ class AppState extends ChangeNotifier {
     ));
   }
 
-  List<Product> search(String q, String cat) {
+  List<Product> search(String q, String catOrType) {
     return products.where((p) =>
-            (cat == 'Todos' || p.category == cat) &&
+            (catOrType == 'Todos' || p.category == catOrType || p.type == catOrType) &&
             (q.isEmpty || p.name.toLowerCase().contains(q.toLowerCase()))).toList();
   }
 
