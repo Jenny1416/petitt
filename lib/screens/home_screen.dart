@@ -81,6 +81,148 @@ class _Catalog extends StatelessWidget {
       required this.cat,
       required this.onQ,
       required this.onCat});
+
+  Widget _buildFlashSaleSection(BuildContext context, AppState app) {
+    final flashProducts =
+        app.products.where((p) => p.discount >= 50).take(4).toList();
+
+    if (flashProducts.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Cabecera Verde Oscuro
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            color: const Color(0xff123516),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Super Ofertas',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.access_time, color: Colors.white, size: 16),
+                      SizedBox(width: 4),
+                      Text(
+                        'Venta Flash    50% - 60%',
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const Spacer(),
+              TextButton(
+                onPressed: () => Navigator.pushNamed(context, AppRoutes.offer),
+                style: TextButton.styleFrom(
+                  side: const BorderSide(color: Colors.white),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Row(
+                  children: [
+                    Text('Ver todo', style: TextStyle(color: Colors.white)),
+                    Icon(Icons.arrow_forward, color: Colors.white, size: 16),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        // Fila de 4 productos mini (exactamente 4 en fila)
+        Row(
+          children: List.generate(flashProducts.length, (i) {
+            final p = flashProducts[i];
+            return Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: i == 0 ? 0 : 3,
+                  right: i == flashProducts.length - 1 ? 0 : 3,
+                ),
+                child: InkWell(
+                  onTap: () => Navigator.pushNamed(context, AppRoutes.offer),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.grey.shade200),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AspectRatio(
+                          aspectRatio: 1,
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                            child: Stack(
+                              children: [
+                                Image.network(
+                                  p.image,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.pets, size: 16)),
+                                ),
+                                Positioned(
+                                  top: 2,
+                                  right: 2,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+                                    decoration: BoxDecoration(
+                                      color: Colors.pink,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text('-${p.discount}%',
+                                        style: const TextStyle(color: Colors.white, fontSize: 7, fontWeight: FontWeight.bold)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                p.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                '\$${p.price.toStringAsFixed(0)}',
+                                style: const TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Color(0xff078818)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
@@ -116,8 +258,12 @@ class _Catalog extends StatelessWidget {
                     onSelected: (_) => onCat(cats[i])))),
         const SizedBox(height: 16),
 
-        // 3. Banner Promocional (Ahora se moverá al hacer scroll)
+        // 3. Banner Promocional
         const PromoBanner(),
+        const SizedBox(height: 16),
+
+        // 3.5 SECCIÓN SUPER OFERTAS (Fila horizontal compacta)
+        _buildFlashSaleSection(context, app),
         const SizedBox(height: 16),
 
         // 4. Contador de Items
@@ -125,15 +271,15 @@ class _Catalog extends StatelessWidget {
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         const SizedBox(height: 8),
 
-        // 5. Cuadrícula de productos
+        // 5. Cuadrícula de productos regular
         data.isEmpty
             ? const SizedBox(
                 height: 200,
                 child: Center(child: Text('No se encontraron productos')),
               )
             : GridView.builder(
-                shrinkWrap: true, // Importante para que funcione dentro de un ListView
-                physics: const NeverScrollableScrollPhysics(), // El scroll lo maneja el ListView principal
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: data.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,

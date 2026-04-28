@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../routes/app_routes.dart';
 
 class BannerData {
   final String title;
@@ -170,7 +171,7 @@ class _PromoBannerState extends State<PromoBanner> {
               const SizedBox(height: 16),
               InkWell(
                 onTap: () {
-                  // Navegación futura
+                  Navigator.pushNamed(context, AppRoutes.offer);
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(

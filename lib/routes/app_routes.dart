@@ -16,6 +16,7 @@ import '../screens/reviews_screen.dart';
 import '../screens/onboarding_page.dart';
 import '../screens/onboarding_page_01.dart';
 import '../screens/onboarding_page_02.dart';
+import '../screens/offer_page.dart';
 import '../models/product.dart';
 import '../models/order.dart';
 
@@ -37,6 +38,7 @@ class AppRoutes {
   static const String onboarding = '/onboarding';
   static const String onboarding1 = '/onboarding1';
   static const String onboarding2 = '/onboarding2';
+  static const String offer = '/offer';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -53,6 +55,7 @@ class AppRoutes {
       onboarding: (context) => const OnboardingPage(),
       onboarding1: (context) => const OnboardingPage01(),
       onboarding2: (context) => const OnboardingPage02(),
+      offer: (context) => const OfferScreen(),
     };
   }
 
