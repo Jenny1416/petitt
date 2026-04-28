@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   provider: ^6.1.2
+  image_picker: ^1.0.7
 
 dev_dependencies:
   flutter_test:
@@ -21,4 +22,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/data/products.json
-    - assets/images/
+    - assets/images/onboarding_01.jpg
+    - assets/images/onboarding_bg.jpg
+    - assets/images/onboarding_02.png
