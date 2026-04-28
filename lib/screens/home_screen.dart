@@ -4,6 +4,7 @@ import '../providers/app_state.dart';
 import '../routes/app_routes.dart';
 import '../widgets/logo.dart';
 import '../widgets/product_card.dart';
+import '../widgets/promo_banner.dart';
 import 'cart_screen.dart';
 import 'orders_screen.dart';
 import 'profile_screen.dart';
@@ -42,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       label: Text('${app.cart.length}'),
                       child: const Icon(Icons.shopping_cart_outlined)))
             ]),
-        body: pages[index],
+        body: IndexedStack(index: index, children: pages),
         bottomNavigationBar: NavigationBar(
           selectedIndex: index,
           onDestinationSelected: (i) => setState(() => index = i),
@@ -85,48 +86,63 @@ class _Catalog extends StatelessWidget {
     final app = context.watch<AppState>();
     final data = app.search(q, cat);
     final cats = ['Todos', 'Perros', 'Gatos', 'Juguetes', 'Cuidado'];
-    return Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          TextField(
-              onChanged: onQ,
-              decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                  hintText: 'Busca cualquier producto...',
-                  filled: true,
-                  fillColor: Colors.grey.shade100,
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(12)))),
-          const SizedBox(height: 12),
-          SizedBox(
-              height: 42,
-              child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: cats.length,
-                  separatorBuilder: (_, __) => const SizedBox(width: 8),
-                  itemBuilder: (_, i) => ChoiceChip(
-                      label: Text(cats[i]),
-                      selected: cat == cats[i],
-                      onSelected: (_) => onCat(cats[i])))),
-          const SizedBox(height: 12),
-          Text('${data.length}+ Items',
-              style:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          const SizedBox(height: 8),
-          Expanded(
-              child: data.isEmpty
-                  ? const Center(child: Text('No se encontraron productos'))
-                  : GridView.builder(
-                      itemCount: data.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: .63,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10),
-                      itemBuilder: (_, i) => ProductCard(p: data[i])))
-        ]));
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        // 1. Buscador
+        TextField(
+            onChanged: onQ,
+            decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                hintText: 'Busca cualquier producto...',
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(12)))),
+        const SizedBox(height: 12),
+
+        // 2. Categorías
+        SizedBox(
+            height: 42,
+            child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: cats.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 8),
+                itemBuilder: (_, i) => ChoiceChip(
+                    label: Text(cats[i]),
+                    selected: cat == cats[i],
+                    onSelected: (_) => onCat(cats[i])))),
+        const SizedBox(height: 16),
+
+        // 3. Banner Promocional (Ahora se moverá al hacer scroll)
+        const PromoBanner(),
+        const SizedBox(height: 16),
+
+        // 4. Contador de Items
+        Text('${data.length}+ Items',
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        const SizedBox(height: 8),
+
+        // 5. Cuadrícula de productos
+        data.isEmpty
+            ? const SizedBox(
+                height: 200,
+                child: Center(child: Text('No se encontraron productos')),
+              )
+            : GridView.builder(
+                shrinkWrap: true, // Importante para que funcione dentro de un ListView
+                physics: const NeverScrollableScrollPhysics(), // El scroll lo maneja el ListView principal
+                itemCount: data.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: .63,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10),
+                itemBuilder: (_, i) => ProductCard(p: data[i])),
+      ],
+    );
   }
 }
 
