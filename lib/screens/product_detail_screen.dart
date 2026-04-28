@@ -12,12 +12,18 @@ class ProductDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
+    // Obtenemos el producto actualizado del estado global
+    final currentProduct = app.products.firstWhere(
+      (p) => p.id == product.id, 
+      orElse: () => product
+    );
+
     return Scaffold(
         appBar: AppBar(actions: [
           IconButton(
-              onPressed: () => app.toggleFavorite(product),
+              onPressed: () => app.toggleFavorite(currentProduct),
               icon: Icon(
-                  app.isFav(product) ? Icons.favorite : Icons.favorite_border,
+                  app.isFav(currentProduct) ? Icons.favorite : Icons.favorite_border,
                   color: Colors.pink)),
           IconButton(
               onPressed: () => Navigator.push(context,
@@ -31,7 +37,7 @@ class ProductDetailScreen extends StatelessWidget {
               Center(
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(14),
-                      child: Image.network(product.image,
+                      child: Image.network(currentProduct.image,
                           height: 210,
                           fit: BoxFit.cover,
                           errorBuilder: (_, __, ___) => Container(
@@ -41,33 +47,33 @@ class ProductDetailScreen extends StatelessWidget {
               const SizedBox(height: 12),
               Wrap(
                   spacing: 8,
-                  children: product.tags
+                  children: currentProduct.tags
                       .map((t) => Chip(
                           label: Text(t),
                           backgroundColor: const Color(0xffe8f7ea)))
                       .toList()),
-              Text(product.name,
+              Text(currentProduct.name,
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 21)),
-              Text(product.brand,
+              Text(currentProduct.brand,
                   style: TextStyle(color: Colors.grey.shade600)),
               Row(children: [
-                Text('\$${product.price.toStringAsFixed(0)}',
+                Text('\$${currentProduct.price.toStringAsFixed(0)}',
                     style: const TextStyle(
                         fontSize: 22, fontWeight: FontWeight.bold)),
                 const SizedBox(width: 8),
-                Text('\$${product.oldPrice.toStringAsFixed(0)}',
+                Text('\$${currentProduct.oldPrice.toStringAsFixed(0)}',
                     style: const TextStyle(
                         decoration: TextDecoration.lineThrough,
                         color: Colors.grey)),
                 const Spacer(),
                 const Icon(Icons.star, color: Colors.amber),
-                Text('${product.rating}')
+                Text(currentProduct.rating.toStringAsFixed(1))
               ]),
               const SizedBox(height: 12),
-              Text(product.description),
+              Text(currentProduct.description),
               const SizedBox(height: 12),
-              Text('Disponibilidad: ${product.stock} unidades',
+              Text('Disponibilidad: ${currentProduct.stock} unidades',
                   style: const TextStyle(
                       color: Color(0xff078818), fontWeight: FontWeight.bold)),
               const Divider(height: 30),
@@ -75,17 +81,17 @@ class ProductDetailScreen extends StatelessWidget {
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.reviews, color: Color(0xff078818)),
                   title: const Text('Calificaciones y reseñas'),
-                  subtitle: const Text('Ver opiniones de otros compradores'),
+                  subtitle: Text('Ver ${currentProduct.reviews.length} opiniones de otros compradores'),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (_) => ReviewsScreen(product: product)))),
+                          builder: (_) => ReviewsScreen(product: currentProduct)))),
               const SizedBox(height: 14),
               PrimaryButton(
                   text: 'Añadir al carrito',
                   onTap: () {
-                    app.addToCart(product);
+                    app.addToCart(currentProduct);
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('Producto añadido al carrito')));
                   })
