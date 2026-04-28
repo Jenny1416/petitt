@@ -160,7 +160,7 @@ class _OrderCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       child: Container(
         width: double.infinity, padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-        decoration: BoxDecoration(border: Border.all(color: color.withOpacity(0.3)), borderRadius: BorderRadius.circular(8)),
+        decoration: BoxDecoration(border: Border.all(color: color.withAlpha((0.3 * 255).toInt())), borderRadius: BorderRadius.circular(8)),
         child: Row(
           children: [
             Icon(icon, color: color, size: 18),

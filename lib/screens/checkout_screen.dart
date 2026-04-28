@@ -11,7 +11,7 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  final name = TextEditingController(text: 'Jennifer Lopez'),
+  final TextEditingController name = TextEditingController(text: 'Jennifer Lopez'),
       phone = TextEditingController(text: '3001234567'),
       city = TextEditingController(text: 'Barranquilla'),
       address = TextEditingController(text: 'Calle 72 # 45 - 20');

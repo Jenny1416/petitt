@@ -4,7 +4,6 @@ import '../models/order.dart';
 import '../providers/app_state.dart';
 import '../widgets/primary_button.dart';
 import 'home_screen.dart';
-import 'orders_screen.dart';
 
 class OrderSuccessScreen extends StatelessWidget {
   final OrderModel order;

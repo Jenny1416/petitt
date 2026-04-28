@@ -33,8 +33,9 @@ class AppState extends ChangeNotifier {
   }
 
   void _generateMockOrders() {
+    const mockOrder1 = 'PET-TEST01';
     orders.add(OrderModel(
-      id: 'PET-TEST01',
+      id: mockOrder1,
       date: '15/10/2023',
       status: OrderStatus.delivered,
       address: 'Calle Falsa 123',
@@ -47,8 +48,9 @@ class AppState extends ChangeNotifier {
       ],
     ));
 
+    const mockOrder2 = 'PET-TEST02';
     orders.add(OrderModel(
-      id: 'PET-TEST02',
+      id: mockOrder2,
       date: '14/10/2023',
       status: OrderStatus.shipping,
       address: 'Avenida Siempre Viva 742',
@@ -159,10 +161,11 @@ class AppState extends ChangeNotifier {
       }
       
       final product = products.firstWhere((p) => p.id == productId);
+      const defaultComment = '¡Excelente producto!';
       final newReview = ReviewModel(
         userName: auth.currentUser?.name ?? 'Usuario Petitt',
         date: '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
-        comment: comment.isEmpty ? '¡Excelente producto!' : comment,
+        comment: comment.isEmpty ? defaultComment : comment,
         rating: stars,
       );
       

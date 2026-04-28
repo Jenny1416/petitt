@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/order.dart';
-import '../models/product.dart';
 import '../providers/app_state.dart';
 import '../routes/app_routes.dart';
 import '../widgets/logo.dart';
@@ -82,7 +81,7 @@ class _Catalog extends StatelessWidget {
 
   // 1. Widget de Categorías de Animales (Círculos)
   Widget _buildAnimalCircles(BuildContext context) {
-    final animals = const [
+    const animals = [
       {'n': 'Todos', 'i': 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=100'},
       {'n': 'Pájaros', 'i': 'https://images.unsplash.com/photo-1522926193341-e9fed196d4ad?w=100'},
       {'n': 'Perros', 'i': 'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=100'},
@@ -217,7 +216,7 @@ class _Catalog extends StatelessWidget {
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
     final data = app.search(q, cat);
-    final filterCats = ['Todos', 'Perros', 'Gatos', 'Juguetes', 'Cuidado'];
+    const filterCats = ['Todos', 'Perros', 'Gatos', 'Juguetes', 'Cuidado'];
 
     return ListView(
       padding: const EdgeInsets.all(16),
