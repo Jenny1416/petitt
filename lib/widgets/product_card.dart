@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../widgets/custom_tag.dart';
 import '../models/product.dart';
 import '../providers/app_state.dart';
 import '../routes/app_routes.dart';
@@ -11,105 +12,144 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppState>();
-    return InkWell(
+    return GestureDetector(
       onTap: () => Navigator.pushNamed(
         context,
         AppRoutes.productDetail,
         arguments: p,
       ),
-      child: Card(
-        elevation: 1,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Imagen con Hero y botón de favorito
+            Expanded(
+              child: Stack(
                 children: [
-                  AspectRatio(
-                    aspectRatio: 1.15,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                        p.image,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
-                          color: Colors.grey.shade100,
-                          child: const Icon(Icons.pets, size: 45),
+                  Hero(
+                    tag: 'product-${p.id}',
+                    child: Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        image: DecorationImage(
+                          image: NetworkImage(p.image),
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
                   ),
                   Positioned(
-                    right: 4,
-                    top: 4,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 3,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.pink,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        '-${p.discount}%',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
+                    top: 16,
+                    right: 16,
+                    child: GestureDetector(
+                      onTap: () => app.toggleFavorite(p),
+                      child: CircleAvatar(
+                        radius: 14,
+                        backgroundColor: Colors.white.withOpacity(0.9),
+                        child: Icon(
+                          app.isFav(p) ? Icons.favorite : Icons.favorite_border,
+                          color: app.isFav(p) ? Colors.pink : Colors.grey,
+                          size: 16,
                         ),
                       ),
                     ),
                   ),
+                  if (p.discount > 0)
+                    Positioned(
+                      top: 16,
+                      left: 16,
+                      child: CustomTag(text: '-${p.discount}%'),
+                    ),
                 ],
               ),
-              const SizedBox(height: 6),
-              Text(
-                p.name,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12,
-                ),
-              ),
-              Text(
-                p.brand,
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 11,
-                ),
-              ),
-              Row(
+            ),
+            
+            // Detalles del producto
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '\$${p.price.toStringAsFixed(0)}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const Spacer(),
-                  IconButton(
-                    visualDensity: VisualDensity.compact,
-                    onPressed: () => app.addToCart(p),
-                    icon: const Icon(
-                      Icons.add_shopping_cart,
-                      color: Color(0xff078818),
-                      size: 20,
+                    p.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Color(0xff123516),
                     ),
                   ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Icon(Icons.star, color: Colors.amber, size: 14),
-                  Text(
-                    ' ${p.rating}',
-                    style: const TextStyle(fontSize: 11),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.amber, size: 14),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${p.rating}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade600,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '\$${p.price.toStringAsFixed(0)}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Color(0xff123516),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          app.addToCart(p);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('${p.name} añadido'),
+                              duration: const Duration(seconds: 1),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: const BoxDecoration(
+                            color: Color(0xff123516),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

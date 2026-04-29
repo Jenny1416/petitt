@@ -38,10 +38,31 @@ class AppState extends ChangeNotifier {
 
   Future<void> init() async {
     products = await ProductService().loadProducts();
-    if (orders.isEmpty && products.isNotEmpty) {
-      _generateMockOrders();
-    }
     notifyListeners();
+  }
+
+  Future<bool> login(String email, String password) async {
+    final success = await auth.login(email, password);
+    if (success) {
+      orders.clear();
+      favorites.clear(); // También limpiamos favoritos para una sesión limpia
+      // Solo cargar pedidos mock si es la cuenta demo
+      if (email.trim().toLowerCase() == 'demo@petit.com' && products.isNotEmpty) {
+        _generateMockOrders();
+      }
+      notifyListeners();
+    }
+    return success;
+  }
+
+  Future<bool> register(String email, String password, String phone) async {
+    final success = await auth.register(email, password, phone);
+    if (success) {
+      orders.clear();
+      favorites.clear();
+      notifyListeners();
+    }
+    return success;
   }
 
   void _generateMockOrders() {

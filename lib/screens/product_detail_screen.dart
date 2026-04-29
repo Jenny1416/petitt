@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/product.dart';
 import '../providers/app_state.dart';
+import '../widgets/product_attribute.dart';
+import '../widgets/quantity_selector.dart';
 import '../widgets/primary_button.dart';
 import 'reviews_screen.dart';
 
@@ -161,21 +163,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                           const Spacer(),
                           // Selector de cantidad
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade100,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Row(
-                              children: [
-                                _qtyBtn(Icons.remove, () => setState(() => quantity = (quantity > 1) ? quantity - 1 : 1)),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                                  child: Text('$quantity', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                                ),
-                                _qtyBtn(Icons.add, () => setState(() => quantity = (quantity < currentProduct.stock) ? quantity + 1 : quantity)),
-                              ],
-                            ),
+                          QuantitySelector(
+                            quantity: quantity,
+                            onDecrement: () => setState(() => quantity = (quantity > 1) ? quantity - 1 : 1),
+                            onIncrement: () => setState(() => quantity = (quantity < currentProduct.stock) ? quantity + 1 : quantity),
+                            height: 44,
+                            iconSize: 20,
                           ),
                         ],
                       ),
@@ -195,9 +188,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       // Atributos rápidos
                       Row(
                         children: [
-                          _buildAttr(Icons.pets, 'Para', currentProduct.category),
-                          _buildAttr(Icons.inventory_2_outlined, 'Stock', '${currentProduct.stock} uds'),
-                          _buildAttr(Icons.local_shipping_outlined, 'Envío', 'Gratis >\$50k'),
+                          ProductAttribute(icon: Icons.pets, label: 'Para', value: currentProduct.category),
+                          ProductAttribute(icon: Icons.inventory_2_outlined, label: 'Stock', value: '${currentProduct.stock} uds'),
+                          ProductAttribute(icon: Icons.local_shipping_outlined, label: 'Envío', value: 'Gratis >\$50k'),
                         ],
                       ),
 
@@ -270,26 +263,5 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _qtyBtn(IconData icon, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        child: Icon(icon, size: 18, color: const Color(0xff123516)),
-      ),
-    );
-  }
 
-  Widget _buildAttr(IconData icon, String label, String value) {
-    return Expanded(
-      child: Column(
-        children: [
-          Icon(icon, color: Colors.grey.shade400, size: 24),
-          const SizedBox(height: 8),
-          Text(label, style: TextStyle(fontSize: 10, color: Colors.grey.shade500)),
-          Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xff123516))),
-        ],
-      ),
-    );
-  }
 }

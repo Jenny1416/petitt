@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../widgets/empty_state_widget.dart';
+import '../widgets/custom_text_field.dart';
+import '../widgets/custom_tag.dart';
 import '../providers/app_state.dart';
 import '../widgets/primary_button.dart';
 
@@ -25,11 +28,19 @@ class _AddressesScreenState extends State<AddressesScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Nueva Dirección', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff123516))),
-            const SizedBox(height: 20),
-            _buildTextField('Etiqueta (Ej: Casa, Oficina)', Icons.label_outline, _titleController),
+            const Text('Nueva Dirección', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xff123516))),
+            const SizedBox(height: 24),
+            CustomTextField(
+              controller: _titleController,
+              hintText: 'Etiqueta (Ej: Casa, Oficina)',
+              prefixIcon: Icons.label_outline,
+            ),
             const SizedBox(height: 16),
-            _buildTextField('Dirección completa', Icons.location_on_outlined, _addressController),
+            CustomTextField(
+              controller: _addressController,
+              hintText: 'Dirección completa',
+              prefixIcon: Icons.location_on_outlined,
+            ),
             const SizedBox(height: 24),
             PrimaryButton(
               text: 'Guardar Dirección', 
@@ -49,18 +60,6 @@ class _AddressesScreenState extends State<AddressesScreen> {
     );
   }
 
-  Widget _buildTextField(String label, IconData icon, TextEditingController controller) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon, size: 20),
-        filled: true,
-        fillColor: Colors.grey.shade50,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,15 +79,12 @@ class _AddressesScreenState extends State<AddressesScreen> {
         ),
       ),
       body: addresses.isEmpty 
-        ? Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.location_off_outlined, size: 64, color: Colors.grey.shade300),
-                const SizedBox(height: 16),
-                const Text('No tienes direcciones guardadas', style: TextStyle(color: Colors.grey)),
-              ],
-            ),
+        ? EmptyStateWidget(
+            icon: Icons.location_off_outlined,
+            title: 'Sin direcciones',
+            description: 'Aún no tienes direcciones guardadas. Agrega una para facilitar tus compras.',
+            buttonText: 'Agregar dirección',
+            onButtonTap: _addAddress,
           )
         : ListView.builder(
             padding: const EdgeInsets.all(20),
@@ -100,37 +96,40 @@ class _AddressesScreenState extends State<AddressesScreen> {
                 margin: const EdgeInsets.only(bottom: 16),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(24),
                   border: isPrimary ? Border.all(color: const Color(0xff123516), width: 1.5) : null,
-                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 10, offset: const Offset(0, 4))],
+                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 15, offset: const Offset(0, 5))],
                 ),
                 child: ListTile(
-                  contentPadding: const EdgeInsets.all(16),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   onTap: () => app.setPrimaryAddress(i),
                   leading: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(color: isPrimary ? const Color(0xff123516) : Colors.grey.shade100, shape: BoxShape.circle),
-                    child: Icon(isPrimary ? Icons.home : Icons.location_on, color: isPrimary ? Colors.white : Colors.grey, size: 20),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: isPrimary ? const Color(0xff123516) : const Color(0xff123516).withOpacity(0.05),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      isPrimary ? Icons.home_rounded : Icons.location_on_rounded,
+                      color: isPrimary ? Colors.white : const Color(0xff123516),
+                      size: 24,
+                    ),
                   ),
                   title: Row(
                     children: [
-                      Text(addr['title']!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      Text(addr['title']!, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xff123516))),
                       if (isPrimary) ...[
                         const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(color: const Color(0xff123516).withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
-                          child: const Text('Principal', style: TextStyle(color: Color(0xff123516), fontSize: 10, fontWeight: FontWeight.bold)),
-                        ),
+                        const CustomTag(text: 'Principal', color: Color(0xff123516)),
                       ],
                     ],
                   ),
                   subtitle: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: Text(addr['address']!, style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
+                    child: Text(addr['address']!, style: TextStyle(color: Colors.grey.shade600, fontSize: 13, height: 1.4)),
                   ),
                   trailing: IconButton(
-                    icon: const Icon(Icons.delete_outline, size: 20, color: Colors.red),
+                    icon: const Icon(Icons.delete_outline_rounded, size: 22, color: Colors.redAccent),
                     onPressed: () => app.removeAddress(i),
                   ),
                 ),

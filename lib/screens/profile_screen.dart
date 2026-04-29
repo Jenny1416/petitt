@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_state.dart';
+import '../widgets/profile_menu_tile.dart';
+import '../widgets/section_header.dart';
 import '../widgets/primary_button.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -105,18 +107,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Información Personal', 
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xff123516))),
-                      TextButton.icon(
-                        onPressed: () => setState(() => _isEditing = !_isEditing),
-                        icon: Icon(_isEditing ? Icons.close : Icons.edit, size: 18),
-                        label: Text(_isEditing ? 'Cancelar' : 'Editar'),
-                        style: TextButton.styleFrom(foregroundColor: _isEditing ? Colors.red : const Color(0xff123516)),
-                      ),
-                    ],
+                  SectionHeader(
+                    title: 'Información Personal',
+                    actionText: _isEditing ? 'Cancelar' : 'Editar',
+                    onActionTap: () {
+                      if (_isEditing) {
+                        // Reset controllers to current user state
+                        final user = context.read<AppState>().auth.currentUser;
+                        _nameController.text = user?.name ?? '';
+                        _phoneController.text = user?.phone ?? '';
+                      }
+                      setState(() => _isEditing = !_isEditing);
+                    },
                   ),
                   const SizedBox(height: 16),
                   
@@ -131,20 +133,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
 
                   const SizedBox(height: 32),
-                  const Text('Mi Actividad', 
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xff123516))),
+                  const SectionHeader(title: 'Mi Actividad'),
                   const SizedBox(height: 16),
                   
-                  _buildMenuTile(Icons.shopping_bag_outlined, 'Mis Pedidos', 'Ver historial y estado', () => app.setHomeTabIndex(3)),
-                  _buildMenuTile(Icons.favorite_outline, 'Mis Favoritos', 'Productos que te encantan', () => app.setHomeTabIndex(1)),
-                  _buildMenuTile(Icons.location_on_outlined, 'Direcciones', 'Gestionar lugares de entrega', () => Navigator.pushNamed(context, '/addresses')),
-                  _buildMenuTile(Icons.headset_mic_outlined, 'Soporte', 'Ayuda y Centro de atención', () => Navigator.pushNamed(context, '/support')),
+                  ProfileMenuTile(
+                    icon: Icons.shopping_bag_outlined,
+                    title: 'Mis Pedidos',
+                    subtitle: 'Ver historial y estado de tus compras',
+                    onTap: () => app.setHomeTabIndex(3),
+                  ),
+                  ProfileMenuTile(
+                    icon: Icons.favorite_outline,
+                    title: 'Mis Favoritos',
+                    subtitle: 'Productos que te han encantado',
+                    onTap: () => app.setHomeTabIndex(1),
+                  ),
+                  ProfileMenuTile(
+                    icon: Icons.location_on_outlined,
+                    title: 'Direcciones',
+                    subtitle: 'Gestionar tus lugares de entrega',
+                    onTap: () => Navigator.pushNamed(context, '/addresses'),
+                  ),
+                  ProfileMenuTile(
+                    icon: Icons.headset_mic_outlined,
+                    title: 'Soporte',
+                    subtitle: 'Ayuda y centro de atención al cliente',
+                    onTap: () => Navigator.pushNamed(context, '/support'),
+                  ),
                   
-                  const SizedBox(height: 24),
-                  _buildMenuTile(Icons.logout, 'Cerrar Sesión', 'Salir de tu cuenta', () {
-                    // Aquí iría la lógica de logout real
-                    Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
-                  }, isDanger: true),
+                  const SizedBox(height: 12),
+                  ProfileMenuTile(
+                    icon: Icons.logout,
+                    title: 'Cerrar Sesión',
+                    subtitle: 'Finalizar sesión en este dispositivo',
+                    onTap: () {
+                      Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+                    },
+                    isDanger: true,
+                  ),
                   const SizedBox(height: 40),
                 ],
               ),
@@ -206,24 +232,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildMenuTile(IconData icon, String title, String subtitle, VoidCallback onTap, {bool isDanger = false}) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        onTap: onTap,
-        leading: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: isDanger ? Colors.red.shade50 : Colors.grey.shade100,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Icon(icon, color: isDanger ? Colors.red : const Color(0xff123516), size: 22),
-        ),
-        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: isDanger ? Colors.red : Colors.black87)),
-        subtitle: Text(subtitle, style: const TextStyle(fontSize: 12)),
-        trailing: const Icon(Icons.chevron_right, size: 20),
-        contentPadding: EdgeInsets.zero,
-      ),
-    );
-  }
 }

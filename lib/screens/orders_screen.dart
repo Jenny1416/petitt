@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../widgets/empty_state_widget.dart';
 import '../providers/app_state.dart';
 import '../models/order.dart';
 
@@ -47,7 +48,11 @@ class _OrderList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (orders.isEmpty) {
-      return const Center(child: Text('No hay pedidos en esta sección'));
+      return const EmptyStateWidget(
+        icon: Icons.receipt_long_outlined,
+        title: 'Sin pedidos',
+        description: 'Aún no tienes pedidos en esta sección.',
+      );
     }
     return ListView.builder(
       padding: const EdgeInsets.all(16),

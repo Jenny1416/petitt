@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_state.dart';
 import '../routes/app_routes.dart';
+import '../widgets/custom_text_field.dart';
 import '../widgets/logo.dart';
 import '../widgets/primary_button.dart';
 
@@ -29,31 +30,29 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 40),
                 const Text(
                   'Iniciar Sesión',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Color(0xff123516)),
                 ),
-                const SizedBox(height: 16),
-                TextField(
+                const SizedBox(height: 8),
+                Text(
+                  '¡Qué bueno verte de nuevo!',
+                  style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
+                ),
+                const SizedBox(height: 32),
+                CustomTextField(
                   controller: email,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    filled: true,
-                    hintText: 'Correo electrónico',
-                    border: OutlineInputBorder(borderSide: BorderSide.none),
-                  ),
+                  hintText: 'Correo electrónico',
+                  prefixIcon: Icons.email_outlined,
                 ),
-                const SizedBox(height: 12),
-                TextField(
+                const SizedBox(height: 16),
+                CustomTextField(
                   controller: pass,
                   obscureText: ob,
-                  decoration: InputDecoration(
-                    filled: true,
-                    hintText: 'Contraseña',
-                    border:
-                        const OutlineInputBorder(borderSide: BorderSide.none),
-                    suffixIcon: IconButton(
-                      icon: Icon(ob ? Icons.visibility_off : Icons.visibility),
-                      onPressed: () => setState(() => ob = !ob),
-                    ),
+                  hintText: 'Contraseña',
+                  prefixIcon: Icons.lock_outline,
+                  suffixIcon: IconButton(
+                    icon: Icon(ob ? Icons.visibility_off : Icons.visibility, color: const Color(0xff123516)),
+                    onPressed: () => setState(() => ob = !ob),
                   ),
                 ),
                 Center(
@@ -70,10 +69,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ? null
                       : () async {
                           setState(() => loading = true);
-                          final ok = await context
-                              .read<AppState>()
-                              .auth
-                              .login(email.text, pass.text);
+                          final app = context.read<AppState>();
+                          final ok = await app.login(email.text, pass.text);
                           setState(() => loading = false);
 
                           if (!context.mounted) return;

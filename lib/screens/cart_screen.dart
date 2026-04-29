@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_state.dart';
+import '../widgets/quantity_selector.dart';
+import '../widgets/empty_state_widget.dart';
 import '../widgets/primary_button.dart';
 import 'checkout_screen.dart';
 
@@ -16,40 +18,14 @@ class CartScreen extends StatelessWidget {
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: inTab ? null : AppBar(title: const Text('Mi Carrito'), elevation: 0, backgroundColor: Colors.white),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(40),
-                decoration: BoxDecoration(
-                  color: Colors.green.shade50,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(Icons.shopping_basket_outlined, size: 80, color: Colors.green.shade200),
-              ),
-              const SizedBox(height: 24),
-              const Text('Tu carrito está vacío', 
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xff123516))
-              ),
-              const SizedBox(height: 12),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: Text('Parece que aún no has añadido nada. ¡Tus mascotas están esperando algo especial!', 
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey, fontSize: 15)
-                ),
-              ),
-              const SizedBox(height: 32),
-              SizedBox(
-                width: 220,
-                child: PrimaryButton(
-                  text: 'Explorar productos',
-                  onTap: () => app.setHomeTabIndex(0),
-                ),
-              ),
-            ],
-          ),
+        body: EmptyStateWidget(
+          icon: Icons.shopping_basket_outlined,
+          title: 'Tu carrito está vacío',
+          description: 'Parece que aún no has añadido nada. ¡Tus mascotas están esperando algo especial!',
+          buttonText: 'Explorar productos',
+          onButtonTap: () => app.setHomeTabIndex(0),
+          iconColor: Colors.green.shade200,
+          iconBackgroundColor: Colors.green.shade50,
         ),
       );
     }
@@ -210,18 +186,12 @@ class CartScreen extends StatelessWidget {
                   constraints: const BoxConstraints(),
                 ),
                 const SizedBox(height: 12),
-                Container(
-                  decoration: BoxDecoration(color: Colors.grey.shade100, borderRadius: BorderRadius.circular(12)),
-                  child: Row(
-                    children: [
-                      _qtyBtn(Icons.remove, () => app.changeQty(item.product, -1)),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Text('${item.quantity}', style: const TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                      _qtyBtn(Icons.add, () => app.changeQty(item.product, 1)),
-                    ],
-                  ),
+                QuantitySelector(
+                  quantity: item.quantity,
+                  onDecrement: () => app.changeQty(item.product, -1),
+                  onIncrement: () => app.changeQty(item.product, 1),
+                  height: 32,
+                  iconSize: 14,
                 ),
               ],
             ),
@@ -231,12 +201,6 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _qtyBtn(IconData icon, VoidCallback onTap) => IconButton(
-    onPressed: onTap,
-    icon: Icon(icon, size: 16),
-    constraints: const BoxConstraints(minWidth: 30, minHeight: 30),
-    padding: EdgeInsets.zero,
-  );
 
   Widget _buildBottomSummary(BuildContext context, AppState app, double savings, int items) {
     return Container(

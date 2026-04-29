@@ -8,61 +8,74 @@ class OnboardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Fondo con imagen
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/onboarding_bg.jpg'),
-                fit: BoxFit.cover,
+          // Ilustración/Imagen superior con forma curva
+          Positioned(
+            top: -50,
+            left: -50,
+            right: -50,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.65,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/onboarding_bg.jpg'),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.elliptical(400, 150),
+                ),
               ),
             ),
           ),
 
-          // Degradado oscuro al final
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.transparent,
-                  Colors.black.withValues(alpha: 0.8),
-                ],
+          // Contenido inferior
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.45,
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
               ),
-            ),
-          ),
-
-          // Contenido
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    '¿Buscas felicidad para tu mascota? ¡Aquí la encuentras!',
+                    'PETIT',
                     style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      fontSize: 42,
+                      fontWeight: FontWeight.w900,
+                      color: Color(0xff123516),
+                      letterSpacing: -1,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Mascotas felices, tú feliz.',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff123516),
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    '¡Encuéntralo aquí, cómpralo ahora!',
+                  Text(
+                    'Mantén a tus amigos peludos sanos, felices y bien cuidados con herramientas inteligentes y servicios para mascotas de confianza.',
                     style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white70,
+                      fontSize: 14,
+                      color: Colors.grey.shade600,
+                      height: 1.5,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 32),
+                  const Spacer(),
                   PrimaryButton(
-                    text: 'Empezar',
+                    text: 'Comience',
                     onTap: () {
                       Navigator.pushNamed(context, AppRoutes.home);
                     },
