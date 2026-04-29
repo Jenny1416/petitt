@@ -12,6 +12,18 @@ class AppState extends ChangeNotifier {
   final List<CartItem> cart = [];
   final List<Product> favorites = [];
   final List<OrderModel> orders = [];
+  final List<Map<String, String>> addresses = [
+    {
+      'title': 'Casa',
+      'address': 'Calle 72 # 45 - 20, Barranquilla',
+      'type': 'Principal'
+    },
+    {
+      'title': 'Trabajo',
+      'address': 'Carrera 53 # 102 - 18, Oficina 402, Barranquilla',
+      'type': 'Secundaria'
+    },
+  ];
   String? lastResetEmail;
   int homeTabIndex = 0;
 
@@ -185,6 +197,35 @@ class AppState extends ChangeNotifier {
     } else {
       review.likes++;
       review.isLikedByMe = true;
+    }
+    notifyListeners();
+  }
+
+  void updateProfile(String name, String phone) {
+    if (auth.currentUser != null) {
+      auth.currentUser!.name = name;
+      auth.currentUser!.phone = phone;
+      notifyListeners();
+    }
+  }
+
+  void addAddress(String title, String address) {
+    addresses.add({
+      'title': title,
+      'address': address,
+      'type': addresses.isEmpty ? 'Principal' : 'Secundaria',
+    });
+    notifyListeners();
+  }
+
+  void removeAddress(int index) {
+    addresses.removeAt(index);
+    notifyListeners();
+  }
+
+  void setPrimaryAddress(int index) {
+    for (var i = 0; i < addresses.length; i++) {
+      addresses[i]['type'] = (i == index) ? 'Principal' : 'Secundaria';
     }
     notifyListeners();
   }

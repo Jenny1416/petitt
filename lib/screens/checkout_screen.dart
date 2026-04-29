@@ -11,11 +11,7 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  final TextEditingController name = TextEditingController(text: 'Jennifer Lopez'),
-      phone = TextEditingController(text: '3001234567'),
-      city = TextEditingController(text: 'Barranquilla'),
-      address = TextEditingController(text: 'Calle 72 # 45 - 20');
-  
+  int? selectedAddressIndex = 0;
   String payment = 'PayPal';
 
   @override
@@ -36,7 +32,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       ),
       body: Column(
         children: [
-          // Barra de progreso visual
           _buildStepProgress(),
 
           Expanded(
@@ -45,26 +40,81 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Resumen de productos rápido
                   _buildOrderPreview(app),
                   const SizedBox(height: 24),
 
-                  // Sección: Datos de Envío
-                  _buildSectionTitle('Información de Envío', Icons.local_shipping_outlined),
-                  const SizedBox(height: 12),
-                  _buildCard(
-                    child: Column(
-                      children: [
-                        _tf('Nombre completo', name, Icons.person_outline),
-                        _tf('Teléfono de contacto', phone, Icons.phone_android_outlined),
-                        _tf('Ciudad / Municipio', city, Icons.location_city_outlined),
-                        _tf('Dirección exacta', address, Icons.home_outlined),
-                      ],
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildSectionTitle('Información de Envío', Icons.local_shipping_outlined),
+                      TextButton(
+                        onPressed: () => Navigator.pushNamed(context, '/addresses'),
+                        child: const Text('Gestionar', style: TextStyle(color: Color(0xff123516), fontWeight: FontWeight.bold)),
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 12),
+                  
+                  if (app.addresses.isEmpty)
+                    _buildCard(
+                      child: Center(
+                        child: Column(
+                          children: [
+                            const Text('No tienes direcciones guardadas'),
+                            TextButton(
+                              onPressed: () => Navigator.pushNamed(context, '/addresses'),
+                              child: const Text('Agregar una dirección'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else
+                    Column(
+                      children: List.generate(app.addresses.length, (index) {
+                        final addr = app.addresses[index];
+                        bool isSelected = selectedAddressIndex == index;
+                        return GestureDetector(
+                          onTap: () => setState(() => selectedAddressIndex = index),
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 12),
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(
+                                color: isSelected ? const Color(0xff123516) : Colors.transparent,
+                                width: 2,
+                              ),
+                              boxShadow: [
+                                BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4)),
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
+                                  color: isSelected ? const Color(0xff123516) : Colors.grey,
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(addr['title']!, style: const TextStyle(fontWeight: FontWeight.bold)),
+                                      Text(addr['address']!, style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  
                   const SizedBox(height: 24),
 
-                  // Sección: Método de Pago
                   _buildSectionTitle('Método de Pago', Icons.account_balance_wallet_outlined),
                   const SizedBox(height: 12),
                   _buildCard(
@@ -78,7 +128,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 100), // Espacio para el botón inferior
+                  const SizedBox(height: 100),
                 ],
               ),
             ),
@@ -216,7 +266,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             PrimaryButton(
               text: 'Confirmar y Pagar',
               onTap: () {
-                final order = app.createOrder('${address.text}, ${city.text}', payment);
+                if (app.addresses.isEmpty || selectedAddressIndex == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Por favor selecciona una dirección')),
+                  );
+                  return;
+                }
+                final selectedAddr = app.addresses[selectedAddressIndex!];
+                final order = app.createOrder(selectedAddr['address']!, payment);
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (_) => OrderSuccessScreen(order: order)),
@@ -270,32 +327,4 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       ),
     );
   }
-
-  Widget _tf(String label, TextEditingController c, IconData icon) => Padding(
-        padding: const EdgeInsets.only(bottom: 15),
-        child: TextField(
-          controller: c,
-          style: const TextStyle(fontSize: 14),
-          decoration: InputDecoration(
-            labelText: label,
-            prefixIcon: Icon(icon, size: 20, color: Colors.grey),
-            filled: true,
-            fillColor: Colors.grey.shade50,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xff123516), width: 1),
-            ),
-            labelStyle: TextStyle(color: Colors.grey.shade600, fontSize: 13),
-          ),
-        ),
-      );
 }
