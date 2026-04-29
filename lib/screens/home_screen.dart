@@ -281,13 +281,69 @@ class _Favorites extends StatelessWidget {
   const _Favorites();
   @override
   Widget build(BuildContext context) {
-    final fav = context.watch<AppState>().favorites;
-    return fav.isEmpty
-        ? const Center(child: Text('Aún no tienes productos favoritos'))
-        : GridView.builder(
+    final app = context.watch<AppState>();
+    final fav = app.favorites;
+
+    if (fav.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(30),
+              decoration: BoxDecoration(color: Colors.pink.shade50, shape: BoxShape.circle),
+              child: Icon(Icons.favorite_border, size: 80, color: Colors.pink.shade200),
+            ),
+            const SizedBox(height: 24),
+            const Text('Tu lista está vacía', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff123516))),
+            const SizedBox(height: 12),
+            const Text('Guarda los productos que más te gusten aquí.', style: TextStyle(color: Colors.grey)),
+            const SizedBox(height: 32),
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xff123516),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+                onPressed: () => app.setHomeTabIndex(0),
+                child: const Text('Explorar tienda'),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
+          child: Row(
+            children: [
+              const Icon(Icons.favorite, color: Colors.pink, size: 24),
+              const SizedBox(width: 10),
+              Text('Tus favoritos (${fav.length})', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xff123516))),
+            ],
+          ),
+        ),
+        Expanded(
+          child: GridView.builder(
             padding: const EdgeInsets.all(16),
             itemCount: fav.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: .63, crossAxisSpacing: 10, mainAxisSpacing: 10),
-            itemBuilder: (_, i) => ProductCard(p: fav[i]));
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, 
+              childAspectRatio: .63, 
+              crossAxisSpacing: 12, 
+              mainAxisSpacing: 12
+            ),
+            itemBuilder: (_, i) => ProductCard(p: fav[i]),
+          ),
+        ),
+      ],
+    );
   }
 }
