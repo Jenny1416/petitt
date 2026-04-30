@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../providers/app_state.dart';
-import '../routes/app_routes.dart';
 
+/// Widget FlashSaleSection: Muestra una sección de ofertas destacadas con un gradiente premium.
+/// Es una técnica de UX para captar la atención del usuario mediante "Scarcity" (escasez).
 class FlashSaleSection extends StatelessWidget {
+  // Manejo de Datos (List/ArrayList): Recibe una lista dinámica de productos filtrados por descuento.
   final List<dynamic> products;
   final VoidCallback onViewAll;
 
@@ -14,18 +15,20 @@ class FlashSaleSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Adaptabilidad Visual: Si no hay productos en oferta, el widget se oculta para no romper el layout.
     if (products.isEmpty) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Contenedor con gradiente para resaltar la importancia visual (Premium Look)
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [Color(0xff123516), Color(0xff1b4d20)],
+              colors: [Color(0xff123516), Color(0xff1b4d20)], // Verde Bosque (Palette Primary)
             ),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(20), // Border radius alto (Organic Style)
             boxShadow: [
               BoxShadow(
                 color: const Color(0xff123516).withOpacity(0.2),
@@ -50,6 +53,7 @@ class FlashSaleSection extends StatelessWidget {
                 ],
               ),
               const Spacer(),
+              // Retroalimentación al usuario (Feedback): Botón interactivo para ver más
               TextButton(
                 onPressed: onViewAll,
                 child: const Text(
@@ -61,6 +65,7 @@ class FlashSaleSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
+        // Distribución adaptable usando Row y Expanded para que se ajuste a cualquier pantalla
         Row(
           children: List.generate(products.length, (i) {
             final p = products[i];
@@ -80,6 +85,7 @@ class FlashSaleSection extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
+                        // Stack: Técnica de diseño para superponer el badge de descuento sobre la imagen
                         AspectRatio(
                           aspectRatio: 1,
                           child: ClipRRect(
@@ -97,7 +103,7 @@ class FlashSaleSection extends StatelessWidget {
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                                     decoration: BoxDecoration(
-                                      color: const Color(0xffD4933E),
+                                      color: const Color(0xffD4933E), // Acento dorado (Premium Accent)
                                       borderRadius: BorderRadius.circular(6),
                                     ),
                                     child: Text(
