@@ -210,12 +210,21 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateProfile(String name, String phone) {
+  void updateUserInfo(String name, String phone) {
     if (auth.currentUser != null) {
       auth.currentUser!.name = name;
       auth.currentUser!.phone = phone;
       notifyListeners();
     }
+  }
+
+  void logout() {
+    auth.currentUser = null;
+    cart.clear();
+    favorites.clear();
+    orders.clear();
+    homeTabIndex = 0;
+    notifyListeners();
   }
 
   /// Calificar un producto y añadir reseña (Manejo de Datos yArrayList)

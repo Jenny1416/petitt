@@ -37,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _saveProfile() {
     final app = context.read<AppState>();
-    app.updateProfile(_nameController.text, _phoneController.text);
+    app.updateUserInfo(_nameController.text, _phoneController.text);
     setState(() {
       _isEditing = false;
     });
@@ -167,6 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     title: 'Cerrar Sesión',
                     subtitle: 'Finalizar sesión en este dispositivo',
                     onTap: () {
+                      app.logout();
                       Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
                     },
                     isDanger: true,

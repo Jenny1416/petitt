@@ -92,7 +92,7 @@ class FlashSaleSection extends StatelessWidget {
                             borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
                             child: Stack(
                               children: [
-                                Image.network(
+                                Image.asset(
                                   p.image,
                                   fit: BoxFit.cover,
                                   width: double.infinity,
