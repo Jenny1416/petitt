@@ -13,6 +13,8 @@ import '../screens/orders_screen.dart';
 import '../screens/order_detail_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/reviews_screen.dart';
+import '../screens/addresses_screen.dart';
+import '../screens/support_screen.dart';
 import '../screens/onboarding_page.dart';
 import '../screens/onboarding_page_01.dart';
 import '../screens/onboarding_page_02.dart';
@@ -35,6 +37,8 @@ class AppRoutes {
   static const String orders = '/orders';
   static const String orderDetail = '/order-detail';
   static const String profile = '/profile';
+  static const String addresses = '/addresses';
+  static const String support = '/support';
   static const String reviews = '/reviews';
   static const String onboarding = '/onboarding';
   static const String onboarding1 = '/onboarding1';
@@ -54,6 +58,8 @@ class AppRoutes {
       checkout: (context) => const CheckoutScreen(),
       orders: (context) => const OrdersScreen(),
       profile: (context) => const ProfileScreen(),
+      addresses: (context) => const AddressesScreen(),
+      support: (context) => const SupportScreen(),
       onboarding: (context) => const OnboardingPage(),
       onboarding1: (context) => const OnboardingPage01(),
       onboarding2: (context) => const OnboardingPage02(),

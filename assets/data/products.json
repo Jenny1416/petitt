@@ -4,6 +4,7 @@
     "name": "Alimento Húmedo Royal Canin Renal Support",
     "brand": "Royal Canin",
     "category": "Perros",
+    "type": "Alimento",
     "price": 40000,
     "oldPrice": 56890,
     "discount": 20,
@@ -22,6 +23,7 @@
     "name": "Alimento Seco Ronik Grain Free Salmón",
     "brand": "Ronik",
     "category": "Gatos",
+    "type": "Alimento",
     "price": 69000,
     "oldPrice": 72900,
     "discount": 50,
@@ -39,6 +41,7 @@
     "name": "Kit Arnés y Correa para Gato Puppy Plus Fucsia",
     "brand": "Puppy Plus",
     "category": "Gatos",
+    "type": "Accesorio",
     "price": 8000,
     "oldPrice": 20000,
     "discount": 60,
@@ -56,6 +59,7 @@
     "name": "Alimento Húmedo Wow Can Cerdo 300g",
     "brand": "Wow Can",
     "category": "Perros",
+    "type": "Alimento",
     "price": 8000,
     "oldPrice": 20000,
     "discount": 60,
@@ -72,7 +76,8 @@
     "id": "p5",
     "name": "Pelota Interactiva para Mascotas",
     "brand": "PETIT",
-    "category": "Juguetes",
+    "category": "Perros",
+    "type": "Juguete",
     "price": 6000,
     "oldPrice": 12000,
     "discount": 50,
@@ -89,7 +94,8 @@
     "id": "p6",
     "name": "Shampoo Suave para Perros y Gatos",
     "brand": "Fancy Pets",
-    "category": "Cuidado",
+    "category": "Gatos",
+    "type": "Cuidado",
     "price": 19000,
     "oldPrice": 22000,
     "discount": 15,
@@ -100,6 +106,42 @@
     "tags": [
       "Cuidado",
       "Baño"
+    ]
+  },
+  {
+    "id": "p7",
+    "name": "Rueda de Ejercicio Silenciosa",
+    "brand": "HamsterFun",
+    "category": "Hamsters",
+    "type": "Juguete",
+    "price": 25000,
+    "oldPrice": 30000,
+    "discount": 16,
+    "rating": 4.9,
+    "stock": 12,
+    "image": "https://images.unsplash.com/photo-1548767797-d8c844163c4c?w=700",
+    "description": "Rueda silenciosa para que tu hámster se ejercite sin ruidos molestos durante la noche.",
+    "tags": [
+      "Hamster",
+      "Ejercicio"
+    ]
+  },
+  {
+    "id": "p8",
+    "name": "Mezcla de Semillas Premium para Hámster",
+    "brand": "LittleCritter",
+    "category": "Hamsters",
+    "type": "Alimento",
+    "price": 12000,
+    "oldPrice": 15000,
+    "discount": 20,
+    "rating": 4.7,
+    "stock": 25,
+    "image": "https://images.unsplash.com/photo-1501706369511-063793028a1e?w=700",
+    "description": "Nutrición completa y balanceada con semillas seleccionadas para hámsteres.",
+    "tags": [
+      "Hamster",
+      "Nutrición"
     ]
   }
 ]

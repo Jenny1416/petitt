@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_state.dart';
 import '../routes/app_routes.dart';
+import '../widgets/custom_text_field.dart';
 import '../widgets/logo.dart';
 import '../widgets/primary_button.dart';
 
@@ -46,51 +47,69 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 40),
                 const Text(
                   'Crear una Cuenta',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Color(0xff123516)),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 8),
+                Text(
+                  'Únete a la familia Smart Pet',
+                  style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
+                ),
+                const SizedBox(height: 24),
                 Center(
                   child: GestureDetector(
                     onTap: _pickImage,
-                    child: CircleAvatar(
-                      radius: 34,
-                      backgroundColor: const Color(0xffe8f7ea),
-                      backgroundImage: _image != null ? FileImage(_image!) : null,
-                      child: _image == null
-                          ? const Icon(Icons.camera_alt, color: Color(0xff078818))
-                          : null,
+                    child: Stack(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: const Color(0xffD4933E), width: 2),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 4)),
+                            ],
+                          ),
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundColor: const Color(0xffe8f7ea),
+                            backgroundImage: _image != null ? FileImage(_image!) : null,
+                            child: _image == null
+                                ? const Icon(Icons.person_outline, size: 40, color: Color(0xff123516))
+                                : null,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: const BoxDecoration(color: Color(0xffD4933E), shape: BoxShape.circle),
+                            child: const Icon(Icons.camera_alt, color: Colors.white, size: 18),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 18),
-                TextField(
+                const SizedBox(height: 32),
+                CustomTextField(
                   controller: email,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    filled: true,
-                    hintText: 'Correo electrónico',
-                    border: OutlineInputBorder(borderSide: BorderSide.none),
-                  ),
+                  hintText: 'Correo electrónico',
+                  prefixIcon: Icons.email_outlined,
                 ),
-                const SizedBox(height: 12),
-                TextField(
+                const SizedBox(height: 16),
+                CustomTextField(
                   controller: pass,
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    filled: true,
-                    hintText: 'Contraseña',
-                    border: OutlineInputBorder(borderSide: BorderSide.none),
-                  ),
+                  hintText: 'Contraseña',
+                  prefixIcon: Icons.lock_outline,
                 ),
-                const SizedBox(height: 12),
-                TextField(
+                const SizedBox(height: 16),
+                CustomTextField(
                   controller: phone,
                   keyboardType: TextInputType.phone,
-                  decoration: const InputDecoration(
-                    filled: true,
-                    hintText: 'Número telefónico',
-                    border: OutlineInputBorder(borderSide: BorderSide.none),
-                  ),
+                  hintText: 'Número telefónico',
+                  prefixIcon: Icons.phone_outlined,
                 ),
                 const SizedBox(height: 32),
                 PrimaryButton(
@@ -107,10 +126,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     }
                     
                     // Aquí podrías guardar la imagen (_image) en tu AppState o base de datos
-                    final ok = await context
-                        .read<AppState>()
-                        .auth
-                        .register(email.text, pass.text, phone.text);
+                    final app = context.read<AppState>();
+                    final ok = await app.register(email.text, pass.text, phone.text);
 
                     if (!context.mounted) return;
 
