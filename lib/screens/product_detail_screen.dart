@@ -65,7 +65,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        Image.network(
+                        Image.asset(
                           currentProduct.image,
                           fit: BoxFit.cover,
                           errorBuilder: (_, __, ___) => Container(

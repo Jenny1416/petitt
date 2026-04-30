@@ -7,11 +7,11 @@ class AnimalCategories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const animals = [
-      {'n': 'Hamsters', 'i': 'https://images.unsplash.com/photo-1548767797-d8c844163c4c?w=100'},
-      {'n': 'Pájaros', 'i': 'https://images.unsplash.com/photo-1522926193341-e9fed196d4ad?w=100'},
-      {'n': 'Perros', 'i': 'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=100'},
-      {'n': 'Gatos', 'i': 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=100'},
-      {'n': 'Pescados', 'i': 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?w=100'},
+      {'n': 'Hamsters', 'i': 'assets/images/hamster.jpg'},
+      {'n': 'Pájaros', 'i': 'assets/images/pajaro.jpg'},
+      {'n': 'Perros', 'i': 'assets/images/perro.jpg'},
+      {'n': 'Gatos', 'i': 'assets/images/gato.jpg'},
+      {'n': 'Pescados', 'i': 'assets/images/pez.jpg'},
     ];
 
     return SizedBox(
@@ -35,7 +35,7 @@ class AnimalCategories extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 30,
                     backgroundColor: Colors.grey.shade100,
-                    backgroundImage: NetworkImage(animals[i]['i']!),
+                    backgroundImage: AssetImage(animals[i]['i']!),
                   ),
                 ),
                 const SizedBox(height: 6),
