@@ -33,10 +33,4 @@ El proyecto implementa el patrón de diseño **M-S-P-V (Modelo-Servicio-Provider
 - **Accent (Amber/Gold)**: `0xffD4933E` - Elegancia y resalte de ofertas.
 - **Surface**: `0xffF8F9FA` - Limpieza y legibilidad.
 
-## 🏗️ Requisitos de Evaluación Satisfechos
 
-- **UI (0.8)**: Diseño moderno, adaptable y uso correcto de componentes.
-- **UX (0.8)**: Flujo de navegación lógico, mensajes de retroalimentación y facilidad de uso.
-- **Estructura (0.8)**: Organización clara de carpetas y separación de lógica/UI.
-- **Datos (1.0)**: Uso correcto de JSON y manejo avanzado de ArrayList.
-- **Persistencia**: Implementación de Shared Preferences para datos locales.
