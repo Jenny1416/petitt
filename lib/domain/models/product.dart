@@ -32,21 +32,21 @@ class Product {
     List<ReviewModel>? reviews,
   }) : reviews = reviews ?? [];
 
-  /// Factory para crear un objeto de dominio desde una estructura JSON (Infraestructura).
+  /// Factory para crear un objeto de dominio desde Supabase o JSON local.
   factory Product.fromJson(Map<String, dynamic> j) => Product(
-        id: j['id'],
-        name: j['name'],
-        brand: j['brand'],
-        category: j['category'],
+        id: j['id'].toString(), // Convertimos a String por si en DB es int
+        name: j['name'] ?? '',
+        brand: j['brand'] ?? '',
+        category: j['category'] ?? '',
         type: j['type'] ?? 'Accesorio',
-        price: (j['price'] as num).toDouble(),
-        oldPrice: (j['oldPrice'] as num).toDouble(),
-        discount: j['discount'],
-        rating: (j['rating'] as num).toDouble(),
-        stock: j['stock'],
-        image: j['image'],
-        description: j['description'],
-        tags: List<String>.from(j['tags']),
+        price: (j['price'] as num?)?.toDouble() ?? 0.0,
+        oldPrice: (j['oldPrice'] as num?)?.toDouble() ?? 0.0,
+        discount: j['discount'] ?? 0,
+        rating: (j['rating'] as num?)?.toDouble() ?? 0.0,
+        stock: j['stock'] ?? 0,
+        image: j['image'] ?? '',
+        description: j['description'] ?? '',
+        tags: j['tags'] != null ? List<String>.from(j['tags']) : [],
         reviews: [],
       );
 }

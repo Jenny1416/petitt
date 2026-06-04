@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import '../../adapters/remote/supabase_auth_adapter.dart';
 import '../../adapters/local/in_memory_order_adapter.dart';
 import '../../adapters/local/json_product_adapter.dart';
+import '../../adapters/remote/supabase_product_adapter.dart';
 import '../../adapters/local/shared_prefs_adapter.dart';
 import '../../../application/auth/login_use_case.dart';
 import '../../../application/auth/register_use_case.dart';
@@ -26,7 +27,7 @@ class InitialBinding extends Bindings {
     // 1. ADAPTADORES (Infraestructura)
     // Son las implementaciones reales que interactúan con APIs o Bases de Datos.
     final authAdapter = SupabaseAuthAdapter();
-    final productAdapter = JsonProductAdapter();
+    final productAdapter = SupabaseProductAdapter(); // Cambiado de JsonProductAdapter
     final orderAdapter = InMemoryOrderAdapter();
     final storageAdapter = SharedPrefsAdapter(); // Adaptador para SharedPreferences
 
