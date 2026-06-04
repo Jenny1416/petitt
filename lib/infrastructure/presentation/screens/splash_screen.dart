@@ -20,19 +20,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _checkStatus();
-  }
-
-  /// Lógica de redirección basada en persistencia (Infraestructura)
-  Future<void> _checkStatus() async {
-    final storage = Get.find<LocalStorageRepository>();
-    final complete = await storage.isOnboardingComplete();
-    
-    // Si el usuario es nuevo, redirigir al flujo de Onboarding
-    if (!complete) {
-      await Future.delayed(const Duration(seconds: 2));
-      Get.offAllNamed(AppRoutes.onboarding1);
-    }
   }
 
   @override

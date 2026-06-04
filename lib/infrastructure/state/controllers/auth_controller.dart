@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'; // Añadir este import
+import 'package:flutter/material.dart'; // Añadir para los colores
 import '../../../domain/models/user.dart';
 import '../../../application/auth/login_use_case.dart';
 import '../../../application/auth/register_use_case.dart';
@@ -53,13 +55,32 @@ class AuthController extends GetxController {
 
   /// Llama al caso de uso de Registro.
   Future<bool> register(String email, String password, String phone) async {
-    isLoading.value = true;
-    final success = await _registerUseCase.execute(email, password, phone);
-    if (success) {
-      _currentUser.value = await _authRepository.getCurrentUser();
+    try {
+      isLoading.value = true;
+      final success = await _registerUseCase.execute(email, password, phone);
+      if (success) {
+        _currentUser.value = await _authRepository.getCurrentUser();
+      }
+      return success;
+    } catch (e) {
+      // Capturamos el error real de Supabase o del sistema
+      String errorMessage = 'Error al registrar usuario';
+      
+      if (e is AuthException) {
+        errorMessage = e.message;
+      }
+      
+      Get.snackbar(
+        'Registro Fallido',
+        errorMessage,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Color(0xffD4933E).withOpacity(0.1),
+        colorText: Color(0xff123516),
+      );
+      return false;
+    } finally {
+      isLoading.value = false;
     }
-    isLoading.value = false;
-    return success;
   }
 
   /// Cierra la sesión limpiando el almacenamiento local.

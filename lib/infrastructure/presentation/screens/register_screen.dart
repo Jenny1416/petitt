@@ -133,19 +133,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return;
                     }
                     
-                    /// Llamada al caso de uso de registro en la capa de infraestructura/estado
+                    /// Llamada al caso de uso de registro
                     final ok = await authController.register(email.text, pass.text, phone.text);
 
                     if (ok) {
-                      /// Navegación a la fase inicial tras registro exitoso
                       Get.offAllNamed(AppRoutes.onboarding1);
-                    } else {
-                      Get.snackbar(
-                        'Error',
-                        'El correo ya existe',
-                        snackPosition: SnackPosition.BOTTOM,
-                      );
                     }
+                    // Ya no mostramos snackbar aquí porque el AuthController se encarga 
+                    // de mostrar el error real de Supabase.
                   },
                 )),
                 Center(

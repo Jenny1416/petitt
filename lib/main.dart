@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'infrastructure/state/bindings/initial_binding.dart';
 import 'infrastructure/presentation/routes/app_pages.dart';
 
@@ -8,6 +9,12 @@ import 'infrastructure/presentation/routes/app_pages.dart';
 void main() async {
   // Asegura que los bindings de Flutter estén listos antes de usar SharedPreferences u otros plugins.
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Inicialización de Supabase
+  await Supabase.initialize(
+    url: 'https://ljdpunxhzbuoarnzeowa.supabase.co',
+    anonKey: 'sb_publishable_xKVU3rQx3lPQn6InqfgJYA_ByMCppt9',
+  );
   
   runApp(const PetitApp());
 }
