@@ -1,10 +1,8 @@
+import 'package:get/get.dart';
 import 'cart_item.dart';
 
-/// CAPA DE DOMINIO - Modelo
-/// Define los estados posibles de un pedido.
 enum OrderStatus { processing, shipping, delivered, cancelled }
 
-/// Representa un hito en el seguimiento de un pedido.
 class TrackingStep {
   final String title;
   final String description;
@@ -19,18 +17,15 @@ class TrackingStep {
   });
 }
 
-/// CAPA DE DOMINIO - Modelo
-/// Entidad principal que representa una orden de compra.
-/// 
-/// PATRÓN HEXAGONAL: Esta clase es pura lógica de datos. No depende de cómo
-/// se guarde el pedido, solo define su estructura.
 class OrderModel {
   final String id, date, address, payment;
+  final String? supabaseId;
   final List<CartItem> items; 
   final double total;
   OrderStatus status;
   final List<TrackingStep> tracking;
-  final List<String> reviewedProductIds = []; 
+  // Usamos RxList para que la UI de reseñas reaccione al instante
+  final RxList<String> reviewedProductIds = <String>[].obs; 
 
   OrderModel({
     required this.id,
@@ -41,5 +36,11 @@ class OrderModel {
     required this.items,
     required this.total,
     required this.tracking,
-  });
+    this.supabaseId,
+    List<String>? reviewedIds,
+  }) {
+    if (reviewedIds != null) {
+      reviewedProductIds.assignAll(reviewedIds);
+    }
+  }
 }

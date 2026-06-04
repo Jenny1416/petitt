@@ -41,13 +41,23 @@ class CreateOrderUseCase {
     );
 
     // Persistencia del pedido a través del puerto
-    await _orderRepository.createOrder(order);
+    final supabaseId = await _orderRepository.createOrder(order);
 
     // Lógica de negocio secundaria: Actualizar inventario
     for (var item in order.items) {
       await _productRepository.updateStock(item.product.id, item.quantity);
     }
 
-    return order;
+    return OrderModel(
+      id: order.id,
+      supabaseId: supabaseId,
+      date: order.date,
+      status: order.status,
+      address: order.address,
+      payment: order.payment,
+      items: order.items,
+      total: order.total,
+      tracking: order.tracking,
+    );
   }
 }

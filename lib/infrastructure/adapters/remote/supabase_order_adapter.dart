@@ -22,7 +22,11 @@ class SupabaseOrderAdapter implements OrderRepository {
       final List<dynamic> data = response as List<dynamic>;
       return data.map((json) {
         final items = (json['order_items'] as List).map((itemJson) {
-          final product = Product.fromJson(itemJson['products']);
+          final productJson = itemJson['products'];
+          if (productJson['image_url'] == null || productJson['image_url'].toString().isEmpty) {
+            productJson['image_url'] = 'assets/images/1.png';
+          }
+          final product = Product.fromJson(productJson);
           return CartItem(product, quantity: itemJson['quantity']);
         }).toList();
 
@@ -34,7 +38,8 @@ class SupabaseOrderAdapter implements OrderRepository {
         )).toList();
 
         return OrderModel(
-          id: json['id'].toString(),
+          id: json['id'].toString().substring(0, 8).toUpperCase(),
+          supabaseId: json['id'].toString(),
           date: json['created_at'].toString().split('T')[0],
           status: _parseStatus(json['status']),
           address: json['address_text'] ?? 'Sin dirección',
@@ -56,7 +61,6 @@ class SupabaseOrderAdapter implements OrderRepository {
     if (userId == null) throw Exception('Usuario no autenticado');
 
     try {
-      // 1. Insertar la orden (Estado inicial: shipping)
       final orderResponse = await _client.from('orders').insert({
         'user_id': userId,
         'total': order.total,
@@ -67,7 +71,6 @@ class SupabaseOrderAdapter implements OrderRepository {
 
       final orderId = orderResponse['id'].toString();
 
-      // 2. Insertar los items
       final itemsToInsert = order.items.map((item) => {
         'order_id': orderId,
         'product_id': item.product.id,
@@ -77,7 +80,6 @@ class SupabaseOrderAdapter implements OrderRepository {
 
       await _client.from('order_items').insert(itemsToInsert);
 
-      // 3. Insertar el primer hito del tracking
       await _client.from('order_tracking').insert({
         'order_id': orderId,
         'status': 'Confirmado',
@@ -101,15 +103,27 @@ class SupabaseOrderAdapter implements OrderRepository {
 
       String desc = status == OrderStatus.delivered 
           ? '¡Pedido entregado con éxito!' 
-          : 'El pedido ha sido cancelado por el usuario.';
+          : 'El pedido ha sido actualizado.';
 
       await _client.from('order_tracking').insert({
         'order_id': orderId,
-        'status': status == OrderStatus.delivered ? 'Recibido' : 'Cancelado',
+        'status': status == OrderStatus.delivered ? 'Recibido' : status.name,
         'description': desc,
       });
     } catch (e) {
       print('DEBUG: Error al actualizar estado: $e');
+    }
+  }
+
+  @override
+  Future<void> deleteOrder(String orderId) async {
+    try {
+      await _client.from('order_tracking').delete().eq('order_id', orderId);
+      await _client.from('order_items').delete().eq('order_id', orderId);
+      await _client.from('orders').delete().eq('id', orderId);
+    } catch (e) {
+      print('DEBUG: Error al eliminar orden: $e');
+      rethrow;
     }
   }
 

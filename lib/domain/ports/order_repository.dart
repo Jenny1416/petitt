@@ -14,4 +14,7 @@ abstract class OrderRepository {
   
   /// Actualiza el estado de un pedido existente (ej. de 'Procesando' a 'Enviado').
   Future<void> updateOrderStatus(String orderId, OrderStatus status);
+
+  /// Elimina un pedido del sistema.
+  Future<void> deleteOrder(String orderId);
 }

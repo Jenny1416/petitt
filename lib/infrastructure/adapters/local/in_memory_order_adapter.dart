@@ -17,7 +17,14 @@ class InMemoryOrderAdapter implements OrderRepository {
 
   @override
   Future<void> updateOrderStatus(String orderId, OrderStatus status) async {
-    final order = _orders.firstWhere((o) => o.id == orderId);
-    order.status = status;
+    final index = _orders.indexWhere((o) => (o.supabaseId ?? o.id) == orderId);
+    if (index != -1) {
+      _orders[index].status = status;
+    }
+  }
+
+  @override
+  Future<void> deleteOrder(String orderId) async {
+    _orders.removeWhere((o) => (o.supabaseId ?? o.id) == orderId);
   }
 }

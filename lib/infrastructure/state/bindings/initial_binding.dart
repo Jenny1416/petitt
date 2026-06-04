@@ -22,22 +22,22 @@ import '../controllers/product_controller.dart';
 /// 
 /// PATRÓN HEXAGONAL: Aquí se conectan los Adaptadores concretos con los Puertos del Dominio
 /// y se inyectan en los Casos de Uso.
+import '../../adapters/remote/supabase_address_adapter.dart';
+import '../../../domain/ports/address_repository.dart';
+
 class InitialBinding extends Bindings {
   @override
   void dependencies() {
-    // 1. ADAPTADORES (Infraestructura)
-    // Son las implementaciones reales que interactúan con APIs o Bases de Datos.
     final authAdapter = SupabaseAuthAdapter();
-    final productAdapter = SupabaseProductAdapter(); // Cambiado de JsonProductAdapter
+    final productAdapter = SupabaseProductAdapter();
     final orderAdapter = SupabaseOrderAdapter();
-    final storageAdapter = SharedPrefsAdapter(); // Adaptador para SharedPreferences
+    final storageAdapter = SharedPrefsAdapter();
     final cartRemoteAdapter = SupabaseCartAdapter();
+    final addressAdapter = SupabaseAddressAdapter();
 
-    // Registramos el repositorio de almacenamiento local en GetX para que sea accesible globalmente.
     Get.put<LocalStorageRepository>(storageAdapter, permanent: true);
+    Get.put<AddressRepository>(addressAdapter, permanent: true);
 
-    // 2. CASOS DE USO (Aplicación)
-    // Contienen la lógica de negocio pura. Reciben los adaptadores a través de sus interfaces (Puertos).
     final loginUseCase = LoginUseCase(authAdapter, storageAdapter);
     final registerUseCase = RegisterUseCase(authAdapter);
     final getProductsUseCase = GetProductsUseCase(productAdapter);
@@ -45,13 +45,9 @@ class InitialBinding extends Bindings {
     final createOrderUseCase = CreateOrderUseCase(orderAdapter, productAdapter);
     final toggleFavoriteUseCase = ToggleFavoriteUseCase(productAdapter, storageAdapter);
 
-    // 3. CONTROLADORES (GetX - Infraestructura/Presentación)
-    // Los controladores orquestan la UI y llaman a los casos de uso.
-    // 'permanent: true' asegura que el estado no se pierda al navegar.
-
     Get.put(AuthController(loginUseCase, registerUseCase, authAdapter), permanent: true);
     Get.put(ProductController(getProductsUseCase, toggleFavoriteUseCase, searchProductsUseCase, productAdapter, storageAdapter), permanent: true);
     Get.put(CartController(storageAdapter, cartRemoteAdapter), permanent: true);
-    Get.put(OrderController(createOrderUseCase, orderAdapter, storageAdapter), permanent: true);
+    Get.put(OrderController(createOrderUseCase, orderAdapter, storageAdapter, addressAdapter), permanent: true);
   }
 }

@@ -5,6 +5,7 @@ import '../../../domain/models/user.dart';
 import '../../../application/auth/login_use_case.dart';
 import '../../../application/auth/register_use_case.dart';
 import '../../../domain/ports/auth_repository.dart';
+import '../controllers/order_controller.dart';
 
 class AuthController extends GetxController {
   final LoginUseCase _loginUseCase;
@@ -81,6 +82,13 @@ class AuthController extends GetxController {
   void logout() {
     _authRepository.logout();
     rxCurrentUser.value = null;
+
+    // Limpieza de estados locales de otros controladores
+    if (Get.isRegistered<OrderController>()) {
+      final orderController = Get.find<OrderController>();
+      orderController.orders.clear();
+      orderController.addresses.clear();
+    }
   }
 
   void updateUserInfo(String name, String phone) {
