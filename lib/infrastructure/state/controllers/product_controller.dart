@@ -43,8 +43,30 @@ class ProductController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Al inicializar el controlador, cargamos los datos desde los repositorios.
     loadProducts();
+    
+    final authController = Get.find<AuthController>();
+    
+    // 1. Sincronizar si ya hay una sesión activa al arrancar
+    if (authController.currentUser != null) {
+      _syncFavoritesFromRemote(authController.currentUser!.id);
+    }
+
+    // 2. Escuchar cambios de sesión futuros (Login/Logout)
+    ever(authController.rxCurrentUser, (user) {
+      if (user != null) {
+        _syncFavoritesFromRemote(user.id);
+      } else {
+        favoriteIds.clear();
+        _localStorageRepository.saveFavorites([]);
+      }
+    });
+  }
+
+  Future<void> _syncFavoritesFromRemote(String userId) async {
+    final remoteFavs = await _productRepository.getFavoriteIds(userId);
+    favoriteIds.assignAll(remoteFavs);
+    await _localStorageRepository.saveFavorites(remoteFavs);
   }
 
   /// Carga inicial de productos y favoritos.

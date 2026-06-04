@@ -73,4 +73,20 @@ class SharedPrefsAdapter implements LocalStorageRepository {
     final List<dynamic> decoded = jsonDecode(encoded);
     return decoded.map((e) => Map<String, String>.from(e)).toList();
   }
+
+  static const String _cartKey = 'user_cart';
+
+  @override
+  Future<void> saveCart(List<Map<String, dynamic>> cartJson) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_cartKey, jsonEncode(cartJson));
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getCart() async {
+    final prefs = await SharedPreferences.getInstance();
+    final data = prefs.getString(_cartKey);
+    if (data == null) return [];
+    return List<Map<String, dynamic>>.from(jsonDecode(data));
+  }
 }

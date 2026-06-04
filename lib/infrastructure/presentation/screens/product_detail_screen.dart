@@ -259,9 +259,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 text: 'Añadir al carrito • \$${(currentProduct.price * quantity).toStringAsFixed(0)}',
                 onTap: () {
                   // Acción de orquestación delegada al controlador
-                  for (int i = 0; i < quantity; i++) {
-                    cartController.addToCart(currentProduct);
-                  }
+                  cartController.addToCart(currentProduct, qty: quantity);
+
                   Get.snackbar(
                     'Carrito',
                     '¡$quantity ${currentProduct.name} añadidos!',

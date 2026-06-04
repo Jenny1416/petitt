@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../../state/controllers/cart_controller.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -43,13 +45,18 @@ class CustomBottomNavBar extends StatelessWidget {
             onTap: () => onTap(1),
             label: 'Deseos',
           ),
-          _NavBarItem(
-            icon: Icons.shopping_cart_outlined,
-            activeIcon: Icons.shopping_cart_rounded,
-            isSelected: currentIndex == 2,
-            onTap: () => onTap(2),
-            label: 'Carrito',
-          ),
+          Obx(() {
+            final cartController = Get.find<CartController>();
+            final count = cartController.cartItems.fold(0, (sum, item) => sum + item.quantity);
+            return _NavBarItem(
+              icon: Icons.shopping_cart_outlined,
+              activeIcon: Icons.shopping_cart_rounded,
+              isSelected: currentIndex == 2,
+              onTap: () => onTap(2),
+              label: 'Carrito',
+              badgeCount: count,
+            );
+          }),
           _NavBarItem(
             icon: Icons.receipt_long_outlined,
             activeIcon: Icons.receipt_long_rounded,
@@ -76,6 +83,7 @@ class _NavBarItem extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
   final String label;
+  final int badgeCount;
 
   const _NavBarItem({
     required this.icon,
@@ -83,6 +91,7 @@ class _NavBarItem extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
     required this.label,
+    this.badgeCount = 0,
   });
 
   @override
@@ -101,10 +110,40 @@ class _NavBarItem extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              isSelected ? activeIcon : icon,
-              color: isSelected ? const Color(0xffD4933E) : Colors.white.withValues(alpha: 0.7),
-              size: 26,
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Icon(
+                  isSelected ? activeIcon : icon,
+                  color: isSelected ? const Color(0xffD4933E) : Colors.white.withValues(alpha: 0.7),
+                  size: 26,
+                ),
+                if (badgeCount > 0)
+                  Positioned(
+                    right: -5,
+                    top: -5,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Colors.pink,
+                        shape: BoxShape.circle,
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                      ),
+                      child: Text(
+                        '$badgeCount',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
             ),
             if (isSelected) ...[
               const SizedBox(height: 4),

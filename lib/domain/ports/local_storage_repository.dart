@@ -31,4 +31,10 @@ abstract class LocalStorageRepository {
 
   /// Recupera la lista de direcciones guardadas.
   Future<List<Map<String, String>>> getAddresses();
+
+  /// Guarda los ítems del carrito.
+  Future<void> saveCart(List<Map<String, dynamic>> cartJson);
+
+  /// Recupera los ítems del carrito.
+  Future<List<Map<String, dynamic>>> getCart();
 }

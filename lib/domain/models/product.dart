@@ -34,19 +34,36 @@ class Product {
 
   /// Factory para crear un objeto de dominio desde Supabase o JSON local.
   factory Product.fromJson(Map<String, dynamic> j) => Product(
-        id: j['id'].toString(), // Convertimos a String por si en DB es int
+        id: j['id'].toString(),
         name: j['name'] ?? '',
         brand: j['brand'] ?? '',
         category: j['category'] ?? '',
         type: j['type'] ?? 'Accesorio',
         price: (j['price'] as num?)?.toDouble() ?? 0.0,
-        oldPrice: (j['oldPrice'] as num?)?.toDouble() ?? 0.0,
+        oldPrice: (j['old_price'] as num?)?.toDouble() ?? 
+                  (j['oldPrice'] as num?)?.toDouble() ?? 0.0,
         discount: j['discount'] ?? 0,
         rating: (j['rating'] as num?)?.toDouble() ?? 0.0,
         stock: j['stock'] ?? 0,
-        image: j['image'] ?? '',
+        image: j['image_url'] ?? j['image'] ?? '',
         description: j['description'] ?? '',
         tags: j['tags'] != null ? List<String>.from(j['tags']) : [],
         reviews: [],
       );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'brand': brand,
+        'category': category,
+        'type': type,
+        'price': price,
+        'old_price': oldPrice,
+        'discount': discount,
+        'rating': rating,
+        'stock': stock,
+        'image_url': image,
+        'description': description,
+        'tags': tags,
+      };
 }

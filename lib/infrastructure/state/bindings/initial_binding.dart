@@ -10,6 +10,7 @@ import '../../../application/favorites/toggle_favorite_use_case.dart';
 import '../../../application/orders/create_order_use_case.dart';
 import '../../../application/products/get_products_use_case.dart';
 import '../../../application/products/search_products_use_case.dart';
+import '../../adapters/remote/supabase_cart_adapter.dart';
 import '../../../domain/ports/local_storage_repository.dart';
 import '../controllers/auth_controller.dart';
 import '../controllers/cart_controller.dart';
@@ -30,6 +31,7 @@ class InitialBinding extends Bindings {
     final productAdapter = SupabaseProductAdapter(); // Cambiado de JsonProductAdapter
     final orderAdapter = InMemoryOrderAdapter();
     final storageAdapter = SharedPrefsAdapter(); // Adaptador para SharedPreferences
+    final cartRemoteAdapter = SupabaseCartAdapter();
 
     // Registramos el repositorio de almacenamiento local en GetX para que sea accesible globalmente.
     Get.put<LocalStorageRepository>(storageAdapter, permanent: true);
@@ -49,7 +51,7 @@ class InitialBinding extends Bindings {
 
     Get.put(AuthController(loginUseCase, registerUseCase, authAdapter), permanent: true);
     Get.put(ProductController(getProductsUseCase, toggleFavoriteUseCase, searchProductsUseCase, productAdapter, storageAdapter), permanent: true);
-    Get.put(CartController(), permanent: true);
+    Get.put(CartController(storageAdapter, cartRemoteAdapter), permanent: true);
     Get.put(OrderController(createOrderUseCase, orderAdapter, storageAdapter), permanent: true);
   }
 }
