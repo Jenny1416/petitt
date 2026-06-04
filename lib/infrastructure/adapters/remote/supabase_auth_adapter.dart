@@ -51,13 +51,13 @@ class SupabaseAuthAdapter implements AuthRepository {
   }
 
   UserModel _mapToDomain(User user) {
-    // IMPORTANTE: Extraemos el teléfono de la metadata
     final metadata = user.userMetadata ?? {};
     return UserModel(
+      id: user.id, // Mapeamos el UUID de Supabase
       email: user.email ?? '',
       password: '',
       name: metadata['full_name'] ?? 'Usuario PETIT',
-      phone: metadata['phone'] ?? '', // Aquí recuperamos lo que guardamos
+      phone: metadata['phone'] ?? '',
     );
   }
 }

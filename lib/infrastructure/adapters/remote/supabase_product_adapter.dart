@@ -40,4 +40,38 @@ class SupabaseProductAdapter implements ProductRepository {
       print('Error al actualizar stock: $e');
     }
   }
+
+  @override
+  Future<List<String>> getFavoriteIds(String userId) async {
+    try {
+      final response = await _client
+          .from('favorites')
+          .select('product_id')
+          .eq('user_id', userId);
+      
+      return (response as List).map((item) => item['product_id'].toString()).toList();
+    } catch (e) {
+      print('Error al obtener favoritos: $e');
+      return [];
+    }
+  }
+
+  @override
+  Future<void> toggleFavorite(String userId, String productId, bool isAdd) async {
+    try {
+      if (isAdd) {
+        await _client.from('favorites').insert({
+          'user_id': userId,
+          'product_id': productId,
+        });
+      } else {
+        await _client.from('favorites')
+            .delete()
+            .eq('user_id', userId)
+            .eq('product_id', productId);
+      }
+    } catch (e) {
+      print('Error al alternar favorito en Supabase: $e');
+    }
+  }
 }

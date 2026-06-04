@@ -3,10 +3,12 @@
 /// 
 /// PATRÓN HEXAGONAL: Los modelos son agnósticos a la persistencia y al framework.
 class UserModel {
+  String id;
   String email, password, phone, name;
   List<Map<String, String>> addresses;
 
   UserModel({
+    required this.id,
     required this.email,
     required this.password,
     required this.phone,

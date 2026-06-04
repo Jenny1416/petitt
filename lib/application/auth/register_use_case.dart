@@ -16,7 +16,12 @@ class RegisterUseCase {
   /// Recibe datos planos de la UI, los convierte a un modelo de Dominio (UserModel)
   /// y solicita al puerto de infraestructura que lo guarde.
   Future<bool> execute(String email, String password, String phone) async {
-    final user = UserModel(email: email, password: password, phone: phone);
+    final user = UserModel(
+      id: '', // El ID será generado por Supabase/Auth Provider
+      email: email, 
+      password: password, 
+      phone: phone
+    );
     return await _authRepository.register(user);
   }
 }

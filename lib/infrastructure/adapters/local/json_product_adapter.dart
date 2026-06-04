@@ -34,4 +34,14 @@ class JsonProductAdapter implements ProductRepository {
     final product = products.firstWhere((p) => p.id == productId);
     product.stock -= quantity;
   }
+
+  @override
+  Future<List<String>> getFavoriteIds(String userId) async {
+    return []; // No soportado en JSON local
+  }
+
+  @override
+  Future<void> toggleFavorite(String userId, String productId, bool isAdd) async {
+    // No soportado en JSON local
+  }
 }

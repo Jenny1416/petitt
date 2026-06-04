@@ -41,7 +41,7 @@ class InitialBinding extends Bindings {
     final getProductsUseCase = GetProductsUseCase(productAdapter);
     final searchProductsUseCase = SearchProductsUseCase();
     final createOrderUseCase = CreateOrderUseCase(orderAdapter, productAdapter);
-    final toggleFavoriteUseCase = ToggleFavoriteUseCase(storageAdapter);
+    final toggleFavoriteUseCase = ToggleFavoriteUseCase(productAdapter, storageAdapter);
 
     // 3. CONTROLADORES (GetX - Infraestructura/Presentación)
     // Los controladores orquestan la UI y llaman a los casos de uso.

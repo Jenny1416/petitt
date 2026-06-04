@@ -6,6 +6,8 @@ import '../../../application/products/search_products_use_case.dart';
 import '../../../application/favorites/toggle_favorite_use_case.dart';
 import '../../../domain/ports/product_repository.dart';
 import '../../../domain/ports/local_storage_repository.dart';
+import '../controllers/auth_controller.dart';
+import 'package:flutter/material.dart';
 
 /// CAPA DE INFRAESTRUCTURA / PRESENTACIÓN - Controlador GetX
 /// Gestiona el estado de los productos y la lógica de negocio relacionada con la UI.
@@ -53,8 +55,22 @@ class ProductController extends GetxController {
     isLoading.value = true;
     products.value = await _getProductsUseCase.execute();
     
-    // PERSISTENCIA: Obtenemos los IDs de favoritos desde SharedPreferences.
-    favoriteIds.value = await _localStorageRepository.getFavorites();
+    // Recuperamos el usuario actual para traer sus favoritos de Supabase
+    final authController = Get.find<AuthController>();
+    final userId = authController.currentUser?.id;
+
+    if (userId != null) {
+      // Intentamos cargar de Supabase primero
+      final remoteFavs = await _productRepository.getFavoriteIds(userId);
+      if (remoteFavs.isNotEmpty) {
+        favoriteIds.assignAll(remoteFavs);
+        await _localStorageRepository.saveFavorites(remoteFavs);
+      } else {
+        favoriteIds.value = await _localStorageRepository.getFavorites();
+      }
+    } else {
+      favoriteIds.value = await _localStorageRepository.getFavorites();
+    }
     
     isLoading.value = false;
   }
@@ -72,8 +88,23 @@ class ProductController extends GetxController {
   /// 
   /// PATRÓN HEXAGONAL: Delega la lógica al caso de uso 'ToggleFavoriteUseCase'.
   Future<void> toggleFavorite(Product p) async {
-    await _toggleFavoriteUseCase.execute(favoriteIds, p.id);
-    // Notifica a GetX que la lista ha cambiado para actualizar la UI.
+    final authController = Get.find<AuthController>();
+    final user = authController.currentUser;
+
+    if (user == null) {
+      Get.snackbar(
+        'Atención', 
+        'Debes iniciar sesión para guardar favoritos',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: const Color(0xffD4933E).withOpacity(0.1),
+        colorText: const Color(0xff123516),
+      );
+      return;
+    }
+
+    // Usamos el ID (UUID) del usuario para sincronizar con Supabase
+    await _toggleFavoriteUseCase.execute(favoriteIds, p.id, user.id);
+
     favoriteIds.refresh();
   }
 

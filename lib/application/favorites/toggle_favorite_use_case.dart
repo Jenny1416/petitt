@@ -1,28 +1,29 @@
+import '../../domain/ports/product_repository.dart';
 import '../../domain/ports/local_storage_repository.dart';
 
 /// CAPA DE APLICACIÓN - Caso de Uso
 /// Gestiona la lógica de agregar o quitar un producto de la lista de favoritos.
-/// 
-/// PATRÓN HEXAGONAL: Este caso de uso coordina el cambio de estado en memoria 
-/// y su persistencia a través del puerto 'LocalStorageRepository'.
 class ToggleFavoriteUseCase {
+  final ProductRepository _productRepository;
   final LocalStorageRepository _localStorageRepository;
 
-  ToggleFavoriteUseCase(this._localStorageRepository);
+  ToggleFavoriteUseCase(this._productRepository, this._localStorageRepository);
 
   /// Ejecuta la acción de alternar favorito.
-  /// 
-  /// GETX + SHARPREFERENCES: 
-  /// 1. Modifica la lista reactiva de GetX que viene de la UI.
-  /// 2. Persiste la nueva lista en SharedPreferences usando el adaptador.
-  Future<void> execute(List<String> currentFavorites, String productId) async {
-    if (currentFavorites.contains(productId)) {
-      currentFavorites.remove(productId);
-    } else {
+  /// Sincroniza tanto con Supabase (remoto) como con SharedPreferences (local para offline).
+  Future<void> execute(List<String> currentFavorites, String productId, String userId) async {
+    final isAdding = !currentFavorites.contains(productId);
+    
+    if (isAdding) {
       currentFavorites.add(productId);
+    } else {
+      currentFavorites.remove(productId);
     }
     
-    // PERSISTENCIA: Sincroniza el cambio con el almacenamiento local.
+    // PERSISTENCIA LOCAL: Para acceso rápido y offline.
     await _localStorageRepository.saveFavorites(currentFavorites);
+
+    // PERSISTENCIA REMOTA: Sincroniza con Supabase.
+    await _productRepository.toggleFavorite(userId, productId, isAdding);
   }
 }

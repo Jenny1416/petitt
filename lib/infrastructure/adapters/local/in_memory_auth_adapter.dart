@@ -4,6 +4,7 @@ import '../../../domain/ports/auth_repository.dart';
 class InMemoryAuthAdapter implements AuthRepository {
   final List<UserModel> _users = [
     UserModel(
+        id: 'demo-uuid-1',
         email: 'demo@petit.com',
         password: '123456',
         phone: '3001234567',

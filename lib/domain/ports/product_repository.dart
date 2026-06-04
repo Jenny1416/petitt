@@ -15,4 +15,10 @@ abstract class ProductRepository {
   
   /// Actualiza la cantidad disponible (stock) de un producto.
   Future<void> updateStock(String productId, int quantity);
+
+  /// Recupera los IDs de los productos favoritos de un usuario.
+  Future<List<String>> getFavoriteIds(String userId);
+
+  /// Agrega o elimina un producto de la tabla de favoritos.
+  Future<void> toggleFavorite(String userId, String productId, bool isAdd);
 }
