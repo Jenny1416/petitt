@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import '../../adapters/remote/supabase_auth_adapter.dart';
-import '../../adapters/local/in_memory_order_adapter.dart';
+import '../../adapters/remote/supabase_order_adapter.dart';
 import '../../adapters/local/json_product_adapter.dart';
 import '../../adapters/remote/supabase_product_adapter.dart';
 import '../../adapters/local/shared_prefs_adapter.dart';
@@ -29,7 +29,7 @@ class InitialBinding extends Bindings {
     // Son las implementaciones reales que interactúan con APIs o Bases de Datos.
     final authAdapter = SupabaseAuthAdapter();
     final productAdapter = SupabaseProductAdapter(); // Cambiado de JsonProductAdapter
-    final orderAdapter = InMemoryOrderAdapter();
+    final orderAdapter = SupabaseOrderAdapter();
     final storageAdapter = SharedPrefsAdapter(); // Adaptador para SharedPreferences
     final cartRemoteAdapter = SupabaseCartAdapter();
 

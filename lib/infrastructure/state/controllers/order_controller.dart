@@ -53,20 +53,38 @@ class OrderController extends GetxController {
     return order;
   }
 
-  void cancelOrder(OrderModel order) {
-    order.status = OrderStatus.cancelled;
-    order.tracking.add(TrackingStep(
-      title: 'Pedido Cancelado',
-      description: 'El pedido ha sido cancelado.',
-      date: '${DateTime.now().day}/${DateTime.now().month}',
-      isCompleted: true,
-    ));
-    orders.refresh();
+  Future<void> cancelOrder(OrderModel order) async {
+    try {
+      order.status = OrderStatus.cancelled;
+      order.tracking.add(TrackingStep(
+        title: 'Pedido Cancelado',
+        description: 'El pedido ha sido cancelado.',
+        date: '${DateTime.now().day}/${DateTime.now().month}',
+        isCompleted: true,
+      ));
+      
+      await _orderRepository.updateOrderStatus(order.id, OrderStatus.cancelled);
+      orders.refresh();
+    } catch (e) {
+      print('Error al cancelar pedido: $e');
+    }
   }
 
-  void confirmDelivery(OrderModel order) {
-    order.status = OrderStatus.delivered;
-    orders.refresh();
+  Future<void> confirmDelivery(OrderModel order) async {
+    try {
+      order.status = OrderStatus.delivered;
+      order.tracking.add(TrackingStep(
+        title: 'Pedido Entregado',
+        description: '¡Gracias por tu compra! El pedido ha sido entregado.',
+        date: '${DateTime.now().day}/${DateTime.now().month}',
+        isCompleted: true,
+      ));
+      
+      await _orderRepository.updateOrderStatus(order.id, OrderStatus.delivered);
+      orders.refresh();
+    } catch (e) {
+      print('Error al confirmar entrega: $e');
+    }
   }
 
   void markAsReviewed(OrderModel order, String productId) {

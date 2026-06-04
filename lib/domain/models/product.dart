@@ -1,11 +1,5 @@
 import 'review.dart';
 
-/// CAPA DE DOMINIO - Modelo
-/// Representa la entidad de negocio 'Producto'.
-/// 
-/// PATRÓN HEXAGONAL: Los modelos de dominio son el corazón de la aplicación. 
-/// No dependen de ninguna librería externa (como GetX o SharedPreferences) 
-/// para garantizar la pureza de la lógica de negocio.
 class Product {
   final String id, name, brand, category, type, image, description;
   final double price, oldPrice;
@@ -32,38 +26,40 @@ class Product {
     List<ReviewModel>? reviews,
   }) : reviews = reviews ?? [];
 
-  /// Factory para crear un objeto de dominio desde Supabase o JSON local.
-  factory Product.fromJson(Map<String, dynamic> j) => Product(
-        id: j['id'].toString(),
-        name: j['name'] ?? '',
-        brand: j['brand'] ?? '',
-        category: j['category'] ?? '',
-        type: j['type'] ?? 'Accesorio',
-        price: (j['price'] as num?)?.toDouble() ?? 0.0,
-        oldPrice: (j['old_price'] as num?)?.toDouble() ?? 
-                  (j['oldPrice'] as num?)?.toDouble() ?? 0.0,
-        discount: j['discount'] ?? 0,
-        rating: (j['rating'] as num?)?.toDouble() ?? 0.0,
-        stock: j['stock'] ?? 0,
-        image: j['image_url'] ?? j['image'] ?? '',
-        description: j['description'] ?? '',
-        tags: j['tags'] != null ? List<String>.from(j['tags']) : [],
-        reviews: [],
-      );
+  factory Product.fromJson(Map<String, dynamic> j) {
+    return Product(
+      id: j['id']?.toString() ?? '',
+      name: j['name']?.toString() ?? 'Producto sin nombre',
+      brand: j['brand']?.toString() ?? '',
+      category: j['category']?.toString() ?? '',
+      type: j['type']?.toString() ?? 'Accesorio',
+      price: double.tryParse(j['price']?.toString() ?? '0') ?? 0.0,
+      oldPrice: double.tryParse(j['old_price']?.toString() ?? j['oldPrice']?.toString() ?? '0') ?? 0.0,
+      discount: int.tryParse(j['discount']?.toString() ?? '0') ?? 0,
+      rating: double.tryParse(j['rating']?.toString() ?? '0') ?? 0.0,
+      stock: int.tryParse(j['stock']?.toString() ?? '0') ?? 0,
+      image: j['image_url']?.toString() ?? j['image']?.toString() ?? '',
+      description: j['description']?.toString() ?? '',
+      tags: j['tags'] != null ? List<String>.from(j['tags']) : [],
+      reviews: (j['reviews'] != null && j['reviews'] is List)
+          ? (j['reviews'] as List).map((r) => ReviewModel.fromJson(r)).toList() 
+          : [],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'brand': brand,
-        'category': category,
-        'type': type,
-        'price': price,
-        'old_price': oldPrice,
-        'discount': discount,
-        'rating': rating,
-        'stock': stock,
-        'image_url': image,
-        'description': description,
-        'tags': tags,
-      };
+    'id': id,
+    'name': name,
+    'brand': brand,
+    'category': category,
+    'type': type,
+    'price': price,
+    'old_price': oldPrice,
+    'discount': discount,
+    'rating': rating,
+    'stock': stock,
+    'image_url': image,
+    'description': description,
+    'tags': tags,
+  };
 }

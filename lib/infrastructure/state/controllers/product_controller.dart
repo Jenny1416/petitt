@@ -75,9 +75,17 @@ class ProductController extends GetxController {
   /// a través del puerto de almacenamiento local.
   Future<void> loadProducts() async {
     isLoading.value = true;
-    products.value = await _getProductsUseCase.execute();
+    try {
+      final results = await _getProductsUseCase.execute();
+      print('DEBUG: Productos recibidos de Supabase: ${results.length}');
+      if (results.isEmpty) {
+        print('ALERTA: La lista de productos está vacía. Verifica las políticas RLS en Supabase.');
+      }
+      products.assignAll(results);
+    } catch (e) {
+      print('ERROR en loadProducts: $e');
+    }
     
-    // Recuperamos el usuario actual para traer sus favoritos de Supabase
     final authController = Get.find<AuthController>();
     final userId = authController.currentUser?.id;
 

@@ -10,8 +10,9 @@ class InMemoryOrderAdapter implements OrderRepository {
   }
 
   @override
-  Future<void> createOrder(OrderModel order) async {
+  Future<String> createOrder(OrderModel order) async {
     _orders.insert(0, order);
+    return order.id;
   }
 
   @override
