@@ -8,6 +8,7 @@ import '../../../application/auth/register_use_case.dart';
 import '../../../application/favorites/toggle_favorite_use_case.dart';
 import '../../../application/orders/create_order_use_case.dart';
 import '../../../application/products/get_products_use_case.dart';
+import '../../../application/products/search_products_use_case.dart';
 import '../../../domain/ports/local_storage_repository.dart';
 import '../controllers/auth_controller.dart';
 import '../controllers/cart_controller.dart';
@@ -37,6 +38,7 @@ class InitialBinding extends Bindings {
     final loginUseCase = LoginUseCase(authAdapter, storageAdapter);
     final registerUseCase = RegisterUseCase(authAdapter);
     final getProductsUseCase = GetProductsUseCase(productAdapter);
+    final searchProductsUseCase = SearchProductsUseCase();
     final createOrderUseCase = CreateOrderUseCase(orderAdapter, productAdapter);
     final toggleFavoriteUseCase = ToggleFavoriteUseCase(storageAdapter);
 
@@ -45,7 +47,7 @@ class InitialBinding extends Bindings {
     // 'permanent: true' asegura que el estado no se pierda al navegar.
 
     Get.put(AuthController(loginUseCase, registerUseCase, authAdapter), permanent: true);
-    Get.put(ProductController(getProductsUseCase, toggleFavoriteUseCase, productAdapter, storageAdapter), permanent: true);
+    Get.put(ProductController(getProductsUseCase, toggleFavoriteUseCase, searchProductsUseCase, productAdapter, storageAdapter), permanent: true);
     Get.put(CartController(), permanent: true);
     Get.put(OrderController(createOrderUseCase, orderAdapter, storageAdapter), permanent: true);
   }

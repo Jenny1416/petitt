@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import '../../../domain/models/product.dart';
 import '../../../domain/models/review.dart';
 import '../../../application/products/get_products_use_case.dart';
+import '../../../application/products/search_products_use_case.dart';
 import '../../../application/favorites/toggle_favorite_use_case.dart';
 import '../../../domain/ports/product_repository.dart';
 import '../../../domain/ports/local_storage_repository.dart';
@@ -15,6 +16,7 @@ class ProductController extends GetxController {
   // Casos de Uso inyectados (Capa de Aplicación).
   final GetProductsUseCase _getProductsUseCase;
   final ToggleFavoriteUseCase _toggleFavoriteUseCase;
+  final SearchProductsUseCase _searchProductsUseCase;
   
   // Puertos inyectados (Capa de Dominio).
   final ProductRepository _productRepository;
@@ -23,6 +25,7 @@ class ProductController extends GetxController {
   ProductController(
     this._getProductsUseCase,
     this._toggleFavoriteUseCase,
+    this._searchProductsUseCase,
     this._productRepository,
     this._localStorageRepository,
   );
@@ -60,11 +63,9 @@ class ProductController extends GetxController {
     homeTabIndex.value = index;
   }
 
-  /// Lógica de filtrado y búsqueda.
+  /// Lógica de filtrado y búsqueda delegada al caso de uso.
   List<Product> search(String q, String catOrType) {
-    return products.where((p) =>
-            (catOrType == 'Todos' || p.category == catOrType || p.type == catOrType) &&
-            (q.isEmpty || p.name.toLowerCase().contains(q.toLowerCase()))).toList();
+    return _searchProductsUseCase.execute(products, q, catOrType);
   }
 
   /// Alterna el estado de favorito de un producto.

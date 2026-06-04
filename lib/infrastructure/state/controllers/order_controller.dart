@@ -43,22 +43,12 @@ class OrderController extends GetxController {
   }
 
   Future<OrderModel> createOrder(String address, String payment, List<CartItem> items, double total) async {
-    final id = 'PET-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
-    final order = OrderModel(
-      id: id,
-      date: '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
-      status: OrderStatus.processing,
+    final order = await _createOrderUseCase.execute(
       address: address,
       payment: payment,
-      items: items.map((e) => CartItem(e.product, quantity: e.quantity)).toList(),
+      items: items,
       total: total,
-      tracking: [
-        TrackingStep(title: 'Pedido Recibido', description: 'Estamos procesando tu pedido.', date: '${DateTime.now().day}/${DateTime.now().month}', isCompleted: true),
-        TrackingStep(title: 'Preparando', description: 'Embalando productos.', date: ''),
-      ],
     );
-    
-    await _createOrderUseCase.execute(order);
     orders.insert(0, order);
     return order;
   }

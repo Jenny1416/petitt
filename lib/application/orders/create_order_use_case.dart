@@ -1,36 +1,53 @@
 import '../../domain/models/order.dart';
+import '../../domain/models/cart_item.dart';
 import '../../domain/ports/order_repository.dart';
 import '../../domain/ports/product_repository.dart';
 
 /// CAPA DE APLICACIÓN - Caso de Uso
-/// Implementa la lógica de negocio pura de la aplicación.
-/// 
-/// PATRÓN HEXAGONAL: Esta clase es un "Orquestador". No sabe si los datos vienen
-/// de una API o de SharedPreferences; solo interactúa con "Puertos" (Interfaces).
+/// Orquesta la creación de un pedido y la actualización de stock.
 class CreateOrderUseCase {
-  // Puertos (Interfaces) definidos en la capa de Dominio.
-  // La implementación real (Adaptador) será inyectada por GetX.
   final OrderRepository _orderRepository;
   final ProductRepository _productRepository;
 
-  /// Inyección de Dependencias:
-  /// GetX se encarga de instanciar los adaptadores de infraestructura 
-  /// (ej. SharedPrefsOrderAdapter) y pasarlos aquí como implementaciones de los puertos.
   CreateOrderUseCase(this._orderRepository, this._productRepository);
 
-  /// Ejecuta la acción de crear un pedido.
-  /// 
-  /// Este flujo coordina dos puertos diferentes:
-  /// 1. Persistencia del pedido (vía OrderRepository).
-  /// 2. Actualización de inventario (vía ProductRepository).
-  Future<void> execute(OrderModel order) async {
-    // El adaptador de infraestructura que implemente 'createOrder' decidirá
-    // si guarda esto en una base de datos local (SharedPreferences) o remota.
+  Future<OrderModel> execute({
+    required String address,
+    required String payment,
+    required List<CartItem> items,
+    required double total,
+  }) async {
+    // REGLA DE NEGOCIO: Generación de identificador único de pedido
+    final id = 'PET-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
+    
+    // REGLA DE NEGOCIO: El estado inicial de todo pedido es 'processing'
+    final order = OrderModel(
+      id: id,
+      date: '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
+      status: OrderStatus.processing,
+      address: address,
+      payment: payment,
+      items: items.map((e) => CartItem(e.product, quantity: e.quantity)).toList(),
+      total: total,
+      tracking: [
+        TrackingStep(
+          title: 'Pedido Recibido', 
+          description: 'Estamos procesando tu pedido.', 
+          date: '${DateTime.now().day}/${DateTime.now().month}', 
+          isCompleted: true
+        ),
+        TrackingStep(title: 'Preparando', description: 'Embalando productos.', date: ''),
+      ],
+    );
+
+    // Persistencia del pedido a través del puerto
     await _orderRepository.createOrder(order);
 
-    // Lógica de negocio: Por cada ítem en el pedido, actualizamos el stock.
+    // Lógica de negocio secundaria: Actualizar inventario
     for (var item in order.items) {
       await _productRepository.updateStock(item.product.id, item.quantity);
     }
+
+    return order;
   }
 }
