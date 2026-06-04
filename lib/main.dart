@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'infrastructure/state/bindings/initial_binding.dart';
-import 'presentation/routes/app_pages.dart';
+import 'infrastructure/presentation/routes/app_pages.dart';
 
 /// PUNTO DE ENTRADA DE LA APLICACIÓN
 /// Aquí se inicializan los servicios globales y se configura el framework GetX.

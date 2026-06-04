@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../domain/models/product.dart';
-import '../../domain/models/review.dart';
-import '../../infrastructure/state/controllers/product_controller.dart';
+import '../../../domain/models/product.dart';
+import '../../../domain/models/review.dart';
+import '../../state/controllers/product_controller.dart';
 
 class ReviewsScreen extends StatelessWidget {
   final Product? product;

@@ -21,8 +21,8 @@ Contiene las implementaciones técnicas de los puertos definidos en el dominio.
 - **Adaptadores**: Implementaciones concretas como `JsonProductAdapter` (lee archivos locales) o `SharedPrefsAdapter` (usa persistencia local).
 - **Gestión de Estado (GetX)**: Aquí residen los controladores que actúan como puentes entre la UI y los casos de uso.
 
-### 4. Capa de Presentación (`lib/presentation/`)
-Responsable de la interfaz de usuario.
+### 4. Capa de Presentación (`lib/infrastructure/presentation/`)
+Responsable de la interfaz de usuario. En arquitectura hexagonal, se considera un adaptador primario.
 - **Widgets y Screens**: Consumen los controladores de GetX para reaccionar a cambios de estado.
 - **Navegación**: Gestionada de forma centralizada a través de `AppPages` y `AppRoutes`.
 

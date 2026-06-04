@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../domain/models/order.dart';
-import '../../infrastructure/state/controllers/product_controller.dart';
+import '../../../domain/models/order.dart';
+import '../../state/controllers/product_controller.dart';
 import '../widgets/primary_button.dart';
 import 'home_screen.dart';
 

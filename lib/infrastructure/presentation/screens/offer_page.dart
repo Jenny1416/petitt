@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../infrastructure/state/controllers/product_controller.dart';
-import '../../infrastructure/state/controllers/cart_controller.dart';
+import '../../state/controllers/product_controller.dart';
+import '../../state/controllers/cart_controller.dart';
 import '../routes/app_pages.dart';
 import '../widgets/logo.dart';
 import '../widgets/product_card.dart';

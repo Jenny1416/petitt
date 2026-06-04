@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../infrastructure/state/controllers/auth_controller.dart';
-import '../../infrastructure/state/controllers/cart_controller.dart';
-import '../../infrastructure/state/controllers/order_controller.dart';
+import '../../state/controllers/auth_controller.dart';
+import '../../state/controllers/cart_controller.dart';
+import '../../state/controllers/order_controller.dart';
 import '../widgets/primary_button.dart';
 import 'order_success_screen.dart';
 

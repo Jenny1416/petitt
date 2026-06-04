@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../domain/models/order.dart';
-import '../../infrastructure/state/controllers/product_controller.dart';
-import '../../infrastructure/state/controllers/cart_controller.dart';
-import '../../infrastructure/state/controllers/order_controller.dart';
+import '../../../domain/models/order.dart';
+import '../../state/controllers/product_controller.dart';
+import '../../state/controllers/cart_controller.dart';
+import '../../state/controllers/order_controller.dart';
 import '../routes/app_pages.dart';
 import '../widgets/animal_categories.dart';
 import '../widgets/flash_sale_section.dart';

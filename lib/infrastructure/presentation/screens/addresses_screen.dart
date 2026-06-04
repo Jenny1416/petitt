@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../infrastructure/state/controllers/order_controller.dart';
+import '../../state/controllers/order_controller.dart';
 import '../widgets/empty_state_widget.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_tag.dart';

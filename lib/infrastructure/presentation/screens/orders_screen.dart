@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../domain/models/order.dart';
-import '../../infrastructure/state/controllers/order_controller.dart';
+import '../../../domain/models/order.dart';
+import '../../state/controllers/order_controller.dart';
 import '../widgets/empty_state_widget.dart';
 
 /// CAPA DE PRESENTACIÓN - Pantalla de Historial de Pedidos

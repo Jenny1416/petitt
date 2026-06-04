@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../infrastructure/state/controllers/cart_controller.dart';
-import '../../infrastructure/state/controllers/product_controller.dart';
+import '../../state/controllers/cart_controller.dart';
+import '../../state/controllers/product_controller.dart';
 import '../widgets/quantity_selector.dart';
 import '../widgets/empty_state_widget.dart';
 import '../widgets/primary_button.dart';

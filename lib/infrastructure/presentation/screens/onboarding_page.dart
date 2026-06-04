@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../domain/ports/local_storage_repository.dart';
+import '../../../domain/ports/local_storage_repository.dart';
 import '../widgets/primary_button.dart';
 
 class OnboardingPage extends StatelessWidget {

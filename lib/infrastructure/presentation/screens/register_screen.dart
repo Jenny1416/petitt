@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
-import '../../infrastructure/state/controllers/auth_controller.dart';
+import '../../state/controllers/auth_controller.dart';
 import '../routes/app_pages.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/logo.dart';

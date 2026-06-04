@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../widgets/custom_tag.dart';
-import '../../domain/models/product.dart';
-import '../../infrastructure/state/controllers/product_controller.dart';
-import '../../infrastructure/state/controllers/cart_controller.dart';
+import '../../../domain/models/product.dart';
+import '../../state/controllers/product_controller.dart';
+import '../../state/controllers/cart_controller.dart';
 import '../routes/app_pages.dart';
 
 /// CAPA DE PRESENTACIÓN - Widget Reutilizable: Tarjeta de Producto

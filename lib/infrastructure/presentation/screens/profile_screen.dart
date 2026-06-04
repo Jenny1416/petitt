@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../infrastructure/state/controllers/auth_controller.dart';
-import '../../infrastructure/state/controllers/product_controller.dart';
+import '../../state/controllers/auth_controller.dart';
+import '../../state/controllers/product_controller.dart';
 import '../routes/app_pages.dart';
 import '../widgets/profile_menu_tile.dart';
 import '../widgets/section_header.dart';

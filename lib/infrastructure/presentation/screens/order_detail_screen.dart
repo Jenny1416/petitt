@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../domain/models/order.dart';
+import '../../../domain/models/order.dart';
 
 /// OrderDetailScreen - Capa de Presentación
 /// 
