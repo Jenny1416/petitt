@@ -13,19 +13,21 @@ PETITT es una aplicación móvil moderna desarrollada en Flutter para la comerci
 
 ## 🛠️ Arquitectura Técnica
 
-El proyecto implementa el patrón de diseño **M-S-P-V (Modelo-Servicio-Provider-Vista)**, garantizando una clara separación de responsabilidades:
+El proyecto implementa una **Arquitectura Hexagonal (Puertos y Adaptadores)** junto con **GetX**, garantizando un desacoplamiento total entre la lógica de negocio y las tecnologías externas:
 
-1.  **Modelos (`lib/models/`)**: Define la estructura de los datos (Productos, Pedidos, Usuarios).
-2.  **Servicios (`lib/services/`)**: Centraliza la lógica de acceso a datos. `ProductService` gestiona el JSON y `AuthService` la simulación de autenticación.
-3.  **Providers (`lib/providers/`)**: `AppState` actúa como el cerebro de la app, manejando el estado global con el paquete `Provider`.
-4.  **Widgets (`lib/widgets/`)**: Librería de componentes reutilizables y consistentes.
-5.  **Screens (`lib/screens/`)**: Capa de presentación que reacciona a los cambios de estado.
+1.  **Dominio (`lib/domain/`)**: El núcleo puro de la aplicación. Contiene las entidades de negocio y las definiciones de interfaces (**Puertos**).
+2.  **Aplicación (`lib/application/`)**: Contiene los **Casos de Uso** que orquestan la lógica de negocio, comunicándose con el dominio.
+3.  **Infraestructura (`lib/infrastructure/`)**: Contiene las implementaciones técnicas (**Adaptadores**), la gestión de estado reactivo con GetX y la persistencia de datos.
+4.  **Presentación (`lib/presentation/`)**: Interfaz de usuario reactiva, widgets atómicos y gestión de rutas centralizada.
 
-## 📊 Manejo de Datos
+Para un desglose detallado de la arquitectura, consulta el archivo [ARCHITECTURE.md](./ARCHITECTURE.md).
 
-- **JSON**: Los datos del catálogo son desacoplados del código fuente, facilitando futuras integraciones con APIs reales.
-- **ArrayList (Lists)**: Se utilizan estructuras de datos dinámicas para el manejo eficiente de filtros, búsquedas y gestión de inventario en tiempo real.
-- **Shared Preferences**: Persistencia local para una experiencia de usuario fluida y profesional.
+## 📊 Manejo de Datos y Estado
+
+- **GetX**: Gestión de estado ultra-reactiva y sistema de inyección de dependencias (Bindings) para desacoplar componentes.
+- **Puertos de Persistencia**: Implementación de repositorios locales que abstraen el uso de SharedPreferences.
+- **Flutter 3.x Ready**: Migración completa a los últimos estándares del SDK (como el uso de `.withValues()` para opacidad).
+- **JSON Local**: Catálogo de productos desacoplado del código fuente para simular integraciones con APIs reales.
 
 ## 🎨 Paleta de Colores
 

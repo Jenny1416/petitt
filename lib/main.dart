@@ -1,30 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'providers/app_state.dart';
-import 'routes/app_routes.dart';
+import 'package:get/get.dart';
+import 'infrastructure/state/bindings/initial_binding.dart';
+import 'presentation/routes/app_pages.dart';
 
-void main() {
-  runApp(ChangeNotifierProvider(
-      create: (_) => AppState()..init(), child: const PetitApp()));
+/// PUNTO DE ENTRADA DE LA APLICACIÓN
+/// Aquí se inicializan los servicios globales y se configura el framework GetX.
+void main() async {
+  // Asegura que los bindings de Flutter estén listos antes de usar SharedPreferences u otros plugins.
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  runApp(const PetitApp());
 }
 
 class PetitApp extends StatelessWidget {
   const PetitApp({super.key});
+  
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    // Uso de GetMaterialApp para habilitar la gestión de estado y navegación de GetX.
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'PETIT',
+      
+      // ARQUITECTURA: El binding inicial inyecta los repositorios y controladores globales
+      // permitiendo el desacoplamiento entre capas desde el arranque.
+      initialBinding: InitialBinding(),
+      
       theme: ThemeData(
         useMaterial3: true,
-        // Usamos una tipografía más moderna y limpia
         fontFamily: 'SF Pro Display', 
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xff123516),
           primary: const Color(0xff123516),
-          secondary: const Color(0xffD4933E), // Color ámbar/dorado de la imagen
+          secondary: const Color(0xffD4933E),
           surface: Colors.white,
-          background: const Color(0xffF8F9FA), // Fondo ligeramente grisáceo
+          surfaceContainerHighest: const Color(0xffF8F9FA),
         ),
         scaffoldBackgroundColor: const Color(0xffF8F9FA),
         appBarTheme: const AppBarTheme(
@@ -65,9 +75,10 @@ class PetitApp extends StatelessWidget {
           ),
         ),
       ),
+      
+      // GESTIÓN DE NAVEGACIÓN: Definición centralizada de rutas.
       initialRoute: AppRoutes.splash,
-      routes: AppRoutes.getRoutes(),
-      onGenerateRoute: AppRoutes.onGenerateRoute,
+      getPages: AppPages.pages,
     );
   }
 }
