@@ -18,7 +18,7 @@ class AuthController extends GetxController {
 
   AuthController(this._loginUseCase, this._registerUseCase, this._authRepository);
 
-  // GESTIÓN DE ESTADO (GetX): 
+  // GESTIÓN DE ESTADO (GetX):
   // 'Rxn' permite observar cambios en el usuario (incluso si es nulo).
   final Rxn<UserModel> _currentUser = Rxn<UserModel>();
   UserModel? get currentUser => _currentUser.value;
@@ -26,16 +26,27 @@ class AuthController extends GetxController {
   // '.obs' convierte una variable simple en un flujo reactivo.
   final RxBool isLoading = false.obs;
 
+  // Mensaje de error reactivo para mostrar en la UI.
+  final RxString errorMessage = ''.obs;
+
+
   /// Llama al caso de uso de Login.
-  /// 
+  ///
   /// GETX + SHARPREFERENCES: El 'LoginUseCase' se encargará de validar
   /// las credenciales y persistir la sesión usando el adaptador de SharedPreferences.
   Future<bool> login(String email, String password) async {
     isLoading.value = true;
-    final user = await _loginUseCase.execute(email, password);
-    _currentUser.value = user;
-    isLoading.value = false;
-    return user != null;
+    errorMessage.value = '';
+    try {
+      final user = await _loginUseCase.execute(email, password);
+      _currentUser.value = user;
+      isLoading.value = false;
+      return user != null;
+    } catch (e) {
+      errorMessage.value = e.toString().replaceAll('Exception: ', '');
+      isLoading.value = false;
+      return false;
+    }
   }
 
   Future<void> requestPasswordReset(String email) async {
@@ -52,15 +63,24 @@ class AuthController extends GetxController {
   }
 
   /// Llama al caso de uso de Registro.
+  /// Captura el error real del adaptador y lo expone en [errorMessage].
   Future<bool> register(String email, String password, String phone) async {
     isLoading.value = true;
-    final success = await _registerUseCase.execute(email, password, phone);
-    if (success) {
-      _currentUser.value = await _authRepository.getCurrentUser();
+    errorMessage.value = '';
+    try {
+      final success = await _registerUseCase.execute(email, password, phone);
+      if (success) {
+        _currentUser.value = await _authRepository.getCurrentUser();
+      }
+      isLoading.value = false;
+      return success;
+    } catch (e) {
+      errorMessage.value = e.toString().replaceAll('Exception: ', '');
+      isLoading.value = false;
+      return false;
     }
-    isLoading.value = false;
-    return success;
   }
+
 
   /// Cierra la sesión limpiando el almacenamiento local.
   void logout() {

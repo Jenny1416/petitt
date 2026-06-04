@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'infrastructure/config/supabase_config.dart';
 import 'infrastructure/state/bindings/initial_binding.dart';
 import 'presentation/routes/app_pages.dart';
 
 /// PUNTO DE ENTRADA DE LA APLICACIÓN
 /// Aquí se inicializan los servicios globales y se configura el framework GetX.
 void main() async {
-  // Asegura que los bindings de Flutter estén listos antes de usar SharedPreferences u otros plugins.
+  // Asegura que los bindings de Flutter estén listos antes de usar plugins.
   WidgetsFlutterBinding.ensureInitialized();
-  
+
+  // Inicializa el cliente de Supabase antes de arrancar la app.
+  await Supabase.initialize(
+    url: SupabaseConfig.url,
+    anonKey: SupabaseConfig.anonKey,
+  );
+
   runApp(const PetitApp());
 }
 

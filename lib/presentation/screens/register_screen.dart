@@ -124,10 +124,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Obx(() => PrimaryButton(
                   text: authController.isLoading.value ? 'Cargando...' : 'Hecho',
                   onTap: authController.isLoading.value ? null : () async {
-                    if (email.text.isEmpty || pass.text.length < 4) {
+                    if (email.text.isEmpty || pass.text.length < 6) {
                       Get.snackbar(
-                        'Error',
-                        'Completa los datos. La contraseña debe tener mínimo 4 caracteres.',
+                        'Datos incompletos',
+                        'Completa los datos. La contraseña debe tener mínimo 6 caracteres.',
                         snackPosition: SnackPosition.BOTTOM,
                       );
                       return;
@@ -140,10 +140,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       /// Navegación a la fase inicial tras registro exitoso
                       Get.offAllNamed(AppRoutes.onboarding1);
                     } else {
+                      final msg = authController.errorMessage.value.isNotEmpty
+                          ? authController.errorMessage.value
+                          : 'No se pudo completar el registro. Intenta de nuevo.';
                       Get.snackbar(
-                        'Error',
-                        'El correo ya existe',
+                        'Error al registrarse',
+                        msg,
                         snackPosition: SnackPosition.BOTTOM,
+                        duration: const Duration(seconds: 4),
+                        backgroundColor: const Color(0xffFFF3F3),
+                        colorText: const Color(0xffC0392B),
                       );
                     }
                   },

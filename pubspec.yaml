@@ -13,6 +13,7 @@ dependencies:
   get: ^4.6.6
   image_picker: ^1.0.7
   shared_preferences: ^2.2.2
+  supabase_flutter: ^2.5.0
 
 dev_dependencies:
   flutter_test:
